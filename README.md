@@ -2,7 +2,7 @@
 
 ![nanosvg](./public/nanosvg-logo-1024.png)
 
-English | [简体中文](./README.zh-CN.md)
+English | [简体中文](./README_zh-CN.md)
 
 A lightweight, blazing-fast, and multi-language SVG developer toolbox built with Astro and Tailwind CSS. 100% client-side execution ensures your design assets never leave your browser sandbox.
 
@@ -37,7 +37,7 @@ Ensure you have [Node.js](https://nodejs.org/) installed (v18.x or higher recomm
 
 1. **Clone the repository**
 ```bash
-   git clone [https://github.com/your-username/nanosvg-tools.git](https://github.com/your-username/nanosvg-tools.git)
+   git clone [https://github.com/BaiYu96/nanosvg-tools.git](https://github.com/BaiYu96/nanosvg-tools.git)
    cd nanosvg-tools
 ```
 2. **Install dependencies**

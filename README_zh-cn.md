@@ -37,7 +37,7 @@
 
 1. **克隆代码仓库**
 ```bash
-   git clone [https://github.com/your-username/nanosvg-tools.git](https://github.com/your-username/nanosvg-tools.git)
+   git clone [https://github.com/BaiYu96/nanosvg-tools.git](https://github.com/BaiYu96/nanosvg-tools.git)
    cd nanosvg-tools
 ```
 2. **安装依赖项目**
