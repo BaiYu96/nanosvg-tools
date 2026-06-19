@@ -30,3 +30,5 @@ pnpm-debug.log*
 
 # CodeSandbox
 .codesandbox/
+
+build_pub.sh
