@@ -1,0 +1,55 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SvgConverter from '../../components/SvgConverter.astro';
+---
+
+<Layout 
+	title="SVG 转 Base64 & CSS Data URI 免费在线转换工具 - 100% 浏览器本地处理"
+	description="一款专为前端开发者设计的轻量级 SVG 在线转换工具。支持将 SVG 源码即时转换为 CSS Data URI 背景图或原生的 Base64 字符串。无需上传服务器，100% 保护隐私，即输即现。"
+>
+	<SvgConverter />
+
+	<article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+		<h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+			为什么需要将 SVG 转换为 Base64 或 CSS Data URI？
+		</h2>
+		<p class="mb-4 text-slate-600 leading-relaxed">
+			在现代前端网页性能优化（Web Performance Optimization）中，减少页面的<strong>关键 HTTP 请求数</strong>是提升加载速度的核心手段。当我们在项目中使用大量细碎的小图标或矢量图形时，每个独立的 <code>.svg</code> 文件都会触发一次网络请求。
+		</p>
+		<p class="mb-4 text-slate-600 leading-relaxed">
+			通过将 SVG 代码直接转换为 <strong>Base64 编码</strong> 或 <strong>CSS 背景图（Data URI）</strong>，你可以将图形数据直接内联嵌入到样式表或 HTML 之中：
+		</p>
+		<ul class="list-box pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+			<li><strong>零网络请求：</strong> 图形随 CSS/HTML 一同下载，无需等待二次请求，瞬间渲染。</li>
+			<li><strong>杜绝无样式闪烁（FOUC）：</strong> 避免因网络延迟导致页面图标在加载瞬间出现空白或错位。</li>
+			<li><strong>资产管理极简：</strong> 无需在项目目录中管理成百上千个微小的图标文件，代码即资产。</li>
+		</ul>
+
+		<h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+			常见问题解答 (FAQ)
+		</h2>
+		<div class="flex flex-col gap-6">
+			<div>
+				<h3 class="font-bold text-slate-800 mb-1">🔒 使用这款工具，我的源码安全吗？</h3>
+				<p class="text-slate-600">
+					绝对安全。市面上很多臃肿的转换网站会把你的源文件上传到他们的远程云服务器进行处理，这存在代码泄露风险。而我们的工具采用 <strong>100% 纯前端浏览器本地沙盒处理</strong>，所有转码和渲染逻辑完全在你的本地电脑上通过 JavaScript 完成，<strong>没有任何数据会流向网络</strong>。
+				</p>
+			</div>
+
+			<div>
+				<h3 class="font-bold text-slate-800 mb-1">⚠️ 转换为 Base64 会导致文件体积变大吗？</h3>
+				<p class="text-slate-600">
+					是的。文本或二进制数据在经过 Base64 编码后，体积通常会增加约 <strong>33%</strong>。因此，对于非常复杂、体积庞大的 SVG 插画，我们仍然建议将其作为独立文件托管或走 CDN。但对于 <strong>5KB 以下的小图标、UI 指示器、Logos</strong>，Base64 带来的体积微调相比于省掉一个 HTTP 握手带来的性能提升，完全可以忽略不计。
+				</p>
+			</div>
+
+			<div>
+				<h3 class="font-bold text-slate-800 mb-1">🛠️ 如何在我的项目中使用生成的 CSS Data URI？</h3>
+				<p class="text-slate-600">
+					你只需要将生成的代码直接复制到任何 CSS 样式类中即可。例如：<br/>
+					<code class="block bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono mt-1 text-indigo-600 leading-normal">.icon-arrow &#123; width: 24px; height: 24px; background-image: url("data:image/svg+xml;..."); &#125;</code>
+				</p>
+			</div>
+		</div>
+	</article>
+</Layout>

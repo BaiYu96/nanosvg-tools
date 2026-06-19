@@ -1,0 +1,216 @@
+---
+// 💡 // 基于当前路由检测语言环境，默认回退至英文 'en'
+const currentLang = Astro.currentLocale || 'en';
+
+// 💡 定义多语言文本字典
+const t = {
+  en: {
+    title1: "1. Paste your SVG Code",
+    subtitle1: "Your code is processed locally in your browser. It is 100% secure and never uploaded.",
+    placeholder1: "<svg ...> ... </svg>",
+    badgeSpeed: "Instant Speed",
+    descSpeed: "Zero lag, real-time local compiler.",
+    badgePrivate: "100% Private",
+    descPrivate: "No server uploads. Secure in-browser processing.",
+    badgeOpt: "Pure Optimized",
+    descOpt: "Clean CSS Data URI outputs ready for production.",
+    title2: "2. Generated Outputs",
+    copy: "Copy",
+    copied: "Copied!",
+    placeholderCss: "CSS code will appear here...",
+    placeholderBase64: "Base64 string will appear here...",
+    invalid: "Invalid SVG code structure."
+  },
+ zh: {
+    title1: "1. 粘贴您的 SVG 代码",
+    subtitle1: "所有代码均在您的浏览器本地处理。100% 安全，绝不上传服务器。",
+    placeholder1: "<svg ...> ... </svg>",
+    // 💡 拆分标题和描述，去掉 **
+    badgeSpeed: "极速响应",
+    descSpeed: "零延迟，纯前端实时本地编译。",
+    badgePrivate: "100% 隐私安全",
+    descPrivate: "无需上传。沙盒级浏览器本地处理。",
+    badgeOpt: "完美优化",
+    descOpt: "输出纯净的 CSS Data URI，可直接用于生产环境。",
+    title2: "2. 自动生成结果",
+    copy: "复制",
+    copied: "已复制!",
+    placeholderCss: "CSS 代码将在此处生成...",
+    placeholderBase64: "Base64 字符串将在此处生成...",
+    invalid: "SVG 代码结构无效，请检查。"
+  },
+  de: {
+    title1: "1. SVG-Code hier einfügen",
+    subtitle1: "Ihr Code wird lokal im Browser verarbeitet. Er ist zu 100% sicher und wird niemals hochgeladen.",
+    placeholder1: "<svg ...> ... </svg>",
+    // 💡 同样去掉 **
+    badgeSpeed: "Sofortige Geschwindigkeit",
+    descSpeed: "Keine Verzögerung, Echtzeit-Compiler.",
+    badgePrivate: "100% Datenschutz",
+    descPrivate: "Keine Server-Uploads. Sichere lokale Sandbox.",
+    badgeOpt: "Rein Optimiert",
+    descOpt: "Saubere CSS Data URI-Ausgaben bereit für die Produktion.",
+    title2: "2. Generierte Ausgaben",
+    copy: "Kopieren",
+    copied: "Kopiert!",
+    placeholderCss: "CSS-Code wird hier angezeigt...",
+    placeholderBase64: "Base64-String wird hier angezeigt...",
+    invalid: "Ungültige SVG-Codestruktur."
+  }
+}[currentLang as 'en' | 'zh' | 'de'] || {
+  en: {}, zh: {}, de: {} 
+};
+---
+<div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-6">
+  <div>
+    <h2 class="text-lg font-bold text-slate-900">{t.title1}</h2>
+    <p class="text-xs text-slate-500 mt-1">{t.subtitle1}</p>
+  </div>
+
+  <textarea 
+    id="svgInput" 
+    rows="6" 
+    class="w-full p-4 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
+    placeholder={t.placeholder1}
+  ></textarea>
+
+  <div id="previewContainer" class="hidden flex flex-col gap-2">
+    <span class="text-xs font-semibold text-slate-600">Live Preview:</span>
+    <div class="w-full min-h-[120px] bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center p-6">
+      <div id="svgPreview" class="max-w-[100px] max-h-[100px] flex items-center justify-center"></div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 border-y border-slate-100 py-4 my-2">
+    <div class="flex items-center gap-2.5 px-2">
+      <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-bold">⚡</div>
+      <div>
+        <h4 class="text-xs font-semibold text-slate-800">{t.badgeSpeed}</h4>
+        <p class="text-[11px] text-slate-400">{t.descSpeed}</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 px-2 sm:border-x border-slate-100">
+      <div class="p-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-bold">🛡️</div>
+      <div>
+        <h4 class="text-xs font-semibold text-slate-800">{t.badgePrivate}</h4>
+        <p class="text-[11px] text-slate-400">{t.descPrivate}</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2.5 px-2">
+      <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg text-sm font-bold">💎</div>
+      <div>
+        <h4 class="text-xs font-semibold text-slate-800">{t.badgeOpt}</h4>
+        <p class="text-[11px] text-slate-400">{t.descOpt}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-4 mt-2">
+    <h2 class="text-lg font-bold text-slate-900">{t.title2}</h2>
+    
+    <div class="flex flex-col gap-1">
+      <div class="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1">
+        <span>CSS Data URI (background-image)</span>
+        <button id="copyCss" data-text={t.copy} class="text-indigo-600 hover:text-indigo-800 font-bold px-2 py-1 bg-indigo-50 rounded hover:bg-indigo-100 transition-colors">{t.copy}</button>
+      </div>
+      <textarea id="outputCss" readonly rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-600 break-all focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-text" placeholder={t.placeholderCss}></textarea>
+    </div>
+
+    <div class="flex flex-col gap-1 mt-2">
+      <div class="flex justify-between items-center text-xs font-semibold text-slate-600 mb-1">
+        <span>Base64 String (for img src)</span>
+        <button id="copyBase64" data-text={t.copy} class="text-indigo-600 hover:text-indigo-800 font-bold px-2 py-1 bg-indigo-50 rounded hover:bg-indigo-100 transition-colors">{t.copy}</button>
+      </div>
+      <textarea id="outputBase64" readonly rows="6" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-600 break-all focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-text" placeholder={t.placeholderBase64}></textarea>
+    </div>
+  </div>
+</div>
+
+<input type="hidden" id="errorMsg" value={t.invalid} />
+<input type="hidden" id="copiedMsg" value={t.copied} />
+
+<script>
+  const svgInput = document.getElementById('svgInput') as HTMLTextAreaElement;
+  const outputCss = document.getElementById('outputCss') as HTMLTextAreaElement;
+  const outputBase64 = document.getElementById('outputBase64') as HTMLTextAreaElement;
+  const errorMsg = (document.getElementById('errorMsg') as HTMLInputElement)?.value || 'Error';
+  const copiedMsg = (document.getElementById('copiedMsg') as HTMLInputElement)?.value || 'Copied!';
+  
+  const previewContainer = document.getElementById('previewContainer');
+  const svgPreview = document.getElementById('svgPreview');
+
+  // 核心转码与渲染逻辑
+  svgInput?.addEventListener('input', () => {
+    const svgCode = svgInput.value.trim();
+    if (!svgCode) {
+      outputCss.value = '';
+      outputBase64.value = '';
+      if (previewContainer) previewContainer.classList.add('hidden');
+      if (svgPreview) svgPreview.innerHTML = '';
+      return;
+    }
+
+    try {
+      // 将 SVG 源码转换为符合标准的 Base64 字符串
+      const base64String = btoa(unescape(encodeURIComponent(svgCode)));
+      outputBase64.value = `data:image/svg+xml;base64,${base64String}`;
+
+      // 对特定字符进行转义，生成符合 CSS Inline Data URI 规范的背景图代码
+      const cssSymbols = svgCode
+        .replace(/"/g, "'")
+        .replace(/%/g, '%25')
+        .replace(/#/g, '%23')
+        .replace(/{/g, '%7B')
+        .replace(/}/g, '%7D')
+        .replace(/</g, '%3C')
+        .replace(/>/g, '%3E');
+      outputCss.value = `background-image: url("data:image/svg+xml;utf8,${cssSymbols}");`;
+
+      // 动态注入并缩放 SVG 元素以进行实时本地预览
+      if (svgPreview && previewContainer) {
+        svgPreview.innerHTML = svgCode;
+        const svgElement = svgPreview.querySelector('svg');
+        if (svgElement) {
+          svgElement.setAttribute('width', '100%');
+          svgElement.setAttribute('height', '100%');
+        }
+        previewContainer.classList.remove('hidden');
+      }
+
+    } catch (e) {
+      // 捕获无效或非标准的 SVG 结构异常
+      outputCss.value = errorMsg;
+      outputBase64.value = errorMsg;
+      if (previewContainer) previewContainer.classList.add('hidden');
+    }
+  });
+
+  const setupCopy = (btnId: string, targetId: string) => {
+    const btn = document.getElementById(btnId);
+    btn?.addEventListener('click', () => {
+      const el = document.getElementById(targetId) as HTMLTextAreaElement;
+      if (el && el.value && el.value !== errorMsg) {
+        navigator.clipboard.writeText(el.value);
+        const originalText = btn.getAttribute('data-text') || 'Copy';
+        btn.innerText = copiedMsg;
+        setTimeout(() => btn.innerText = originalText, 1500);
+      }
+    });
+  }
+
+  // 初始化复制按钮的剪贴板监听
+  setupCopy('copyCss', 'outputCss');
+  setupCopy('copyBase64', 'outputBase64');
+
+  const setupAutoSelect = (id: string) => {
+    const el = document.getElementById(id) as HTMLTextAreaElement;
+    el?.addEventListener('click', () => {
+      if (el.value && el.value !== errorMsg) {
+        el.select();
+      }
+    });
+  }
+  // 为输出文本框配置“点击即全选”
+  setupAutoSelect('outputCss');
+  setupAutoSelect('outputBase64');
+</script>

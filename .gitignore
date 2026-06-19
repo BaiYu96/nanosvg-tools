@@ -1,0 +1,32 @@
+# build output
+dist/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+# vscode
+# 忽略 workspace 存储（临时文件），但保留 settings.json
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# CodeSandbox
+.codesandbox/

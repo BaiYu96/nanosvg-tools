@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SvgConverter from '../components/SvgConverter.astro';
+---
+
+<Layout 
+  title="Free SVG to Base64 & CSS Converter - 100% Client-Side"
+  description="Quickly convert your SVG code into CSS Data URI background-images or raw Base64 strings. No file uploads, completely secure, and instant conversion tool built for frontend developers."
+>
+  <SvgConverter />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Why Convert SVG to Base64 or CSS Data URI?
+    </h2>
+    <p class="mb-4 text-sm">
+      Modern web performance optimization heavily emphasizes reducing the number of critical HTTP requests. When you embed small icons or vector shapes as standalone external <code>.svg</code> files, each file triggers a network request. By converting them into <strong>Base64 strings</strong> or inline <strong>CSS background-images</strong>, you embed the graphics directly into your stylesheets or HTML.
+    </p>
+    <ul class="list-disc pl-5 mb-6 text-sm flex flex-col gap-2">
+      <li><strong>Zero HTTP Requests:</strong> Graphics load immediately along with the CSS/HTML code.</li>
+      <li><strong>Flash-of-Unstyled-Content (FOUC) Prevention:</strong> Avoid layout shifts caused by delayed icon loading.</li>
+      <li><strong>Cleaner Asset Management:</strong> No need to track hundreds of tiny icon files across your project directory.</li>
+    </ul>
+
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Frequently Asked Questions (FAQ)
+    </h2>
+    <div class="flex flex-col gap-6 text-sm">
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">🔒 Is my data safe with NanoSVG Tools?</h3>
+        <p class="text-slate-600">
+          Absolutely. Unlike other bloated converter sites that upload your source files to their remote cloud servers, our tool is <strong>100% client-side</strong>. The conversion happens strictly within your browser's local sandbox using raw vanilla JavaScript. No data ever leaves your device.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">⚠️ Does Base64 increase my file sizes?</h3>
+        <p class="text-slate-600">
+          Yes, it does. Encoding text or binary data into Base64 typically increases the string size by around <strong>33%</strong>. For large, complex SVG illustrations, we recommend keeping them as external assets. However, for small UI icons, UI indicators, and logos under 5KB, the overhead is negligible compared to the massive performance boost of saving an HTTP handshake.
+        </p>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">🛠️ How do I use the CSS Data URI output?</h3>
+        <p class="text-slate-600">
+          Simply paste the output inside any CSS class block. For example: <br/>
+          <code class="block bg-slate-50 p-2 rounded border border-slate-100 text-xs font-mono mt-1 text-indigo-600">.icon-arrow &#123; width: 24px; height: 24px; background-image: url("data:image/svg+xml;..."); &#125;</code>
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>
