@@ -37,7 +37,7 @@ Ensure you have [Node.js](https://nodejs.org/) installed (v18.x or higher recomm
 
 1. **Clone the repository**
 ```bash
-   git clone [https://github.com/BaiYu96/nanosvg-tools.git](https://github.com/BaiYu96/nanosvg-tools.git)
+   git clone https://github.com/BaiYu96/nanosvg-tools.git
    cd nanosvg-tools
 ```
 2. **Install dependencies**
@@ -76,11 +76,11 @@ npm run build
 
 We are actively expanding this tool into an All-in-One SVG Suite. Upcoming features include:
 
-[ ] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
+- [ ] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
 
-[ ] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React/Vue components.
+- [ ] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React/Vue components.
 
-[ ] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
+- [ ] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
 
 ## 📄 License
 

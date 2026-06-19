@@ -37,7 +37,7 @@
 
 1. **克隆代码仓库**
 ```bash
-   git clone [https://github.com/BaiYu96/nanosvg-tools.git](https://github.com/BaiYu96/nanosvg-tools.git)
+   git clone https://github.com/BaiYu96/nanosvg-tools.git
    cd nanosvg-tools
 ```
 2. **安装依赖项目**
@@ -74,11 +74,11 @@
 ## 🗺️ 后续功能规划
 我们计划将该项目逐步升级为 "一站式 SVG 万能工具箱"，后续将拼图式迭代以下高频刚需功能：
 
-[ ] SVG 压缩优化 (SVG Optimizer): 纯前端集成 SVGO 核心逻辑，快速剔除设计软件导出的冗余元数据。
+- [ ] SVG 压缩优化 (SVG Optimizer): 纯前端集成 SVGO 核心逻辑，快速剔除设计软件导出的冗余元数据。
 
-[ ] SVG 转组件 (SVG to JSX/TSX): 将原始 SVG 转换为干净的、可直接复制使用的 React/Vue 组件。
+- [ ] SVG 转组件 (SVG to JSX/TSX): 将原始 SVG 转换为干净的、可直接复制使用的 React/Vue 组件。
 
-[ ] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
+- [ ] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
 
 ## 📄 开源协议
 本项目采用 Apache-2.0 license 开源协议。
