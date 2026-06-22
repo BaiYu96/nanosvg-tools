@@ -2,7 +2,7 @@
 
 ![nanosvg](./public/nanosvg-logo-1024.png)
 
-English | [简体中文](./README_zh-CN.md)
+English | [简体中文](./README_zh-cn.md)
 
 A lightweight, blazing-fast, and multi-language SVG developer toolbox built with Astro and Tailwind CSS. 100% client-side execution ensures your design assets never leave your browser sandbox.
 
@@ -16,6 +16,7 @@ A lightweight, blazing-fast, and multi-language SVG developer toolbox built with
 - **Production-Ready Outputs:** 
   - **CSS Data URI:** Properly escaped symbols (`#`, `{`, `}`, `<`, `>`, etc.) optimized directly for CSS `background-image` use.
   - **Base64 String:** Raw base64 encoding suitable for HTML `<img>` src tags.
+- **SVG Optimizer:** Compress SVG markup locally with SVGO, compare file sizes, and preview original vs optimized output.
 - **Enhanced UX:** Interactive textareas with "click-to-select-all" and one-click clipboard copying.
 
 ---
@@ -62,21 +63,26 @@ npm run build
 ├── src/
 │   ├── components/
 │   │   └── SvgConverter.astro  # Core toolbox component with clean tech-focused comments
+│   │   └── SvgOptimizer.astro  # Local SVGO-powered optimizer component
 │   ├── layouts/
 │   │   └── Layout.astro        # Global layout with language switcher
 │   └── pages/                  # File-based i18n routing
 │       ├── index.astro         # Default English Landing
+│       ├── optimizer/
+│       │   └── index.astro     # English SVG Optimizer
 │       ├── zh/
-│       │   └── index.astro     # Simplified Chinese Landing
+│       │   ├── index.astro     # Simplified Chinese Landing
+│       │   └── optimizer/      # Simplified Chinese SVG Optimizer
 │       └── de/
-│           └── index.astro     # German Landing
+│           ├── index.astro     # German Landing
+│           └── optimizer/      # German SVG Optimizer
 ```
 
 ## 🗺️ Roadmap (All-in-One Toolbox)
 
-We are actively expanding this tool into an All-in-One SVG Suite. Upcoming features include:
+We are actively expanding this tool into an All-in-One SVG Suite. Current and upcoming features include:
 
-- [ ] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
+- [x] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
 
 - [ ] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React/Vue components.
 

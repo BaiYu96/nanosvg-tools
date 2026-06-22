@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SvgOptimizer from '../../components/SvgOptimizer.astro';
+---
+
+<Layout
+  title="Free SVG Optimizer - Compress SVG Online Locally"
+  description="Compress and optimize SVG code directly in your browser with SVGO. Compare original and optimized file sizes, preview both versions, and copy production-ready SVG output without uploads."
+>
+  <SvgOptimizer />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Why Optimize SVG Files?
+    </h2>
+    <p class="mb-4 text-sm">
+      Design tools often export SVG files with metadata, comments, dimensions, and extra whitespace that are useful while editing but unnecessary in production. Optimizing SVG markup keeps the visual result intact while making icons and illustrations lighter.
+    </p>
+    <ul class="list-disc pl-5 mb-6 text-sm flex flex-col gap-2">
+      <li><strong>Smaller Assets:</strong> Reduce SVG source size before shipping it in HTML, CSS, or component code.</li>
+      <li><strong>ViewBox Safe:</strong> The optimizer keeps <code>viewBox</code> so your icons remain scalable.</li>
+      <li><strong>Local Processing:</strong> SVG code is optimized in your browser and never uploaded.</li>
+    </ul>
+
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Frequently Asked Questions (FAQ)
+    </h2>
+    <div class="flex flex-col gap-6 text-sm">
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">Does optimization change how my SVG looks?</h3>
+        <p class="text-slate-600">
+          The default configuration is conservative: it removes unnecessary markup while preserving the SVG's viewBox and visual attributes such as fill and stroke.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">Is my SVG uploaded anywhere?</h3>
+        <p class="text-slate-600">
+          No. Optimization runs locally in your browser using SVGO bundled with this Astro app.
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

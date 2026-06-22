@@ -1,0 +1,43 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgOptimizer from '../../../components/SvgOptimizer.astro';
+---
+
+<Layout
+  title="SVG 压缩优化工具 - 浏览器本地 SVGO 在线压缩"
+  description="在浏览器本地使用 SVGO 压缩优化 SVG 代码，实时对比原始体积与优化后体积，预览优化结果并一键复制生产可用的 SVG。"
+>
+  <SvgOptimizer />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      为什么需要压缩优化 SVG？
+    </h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">
+      设计软件导出的 SVG 往往包含注释、编辑器元数据、固定尺寸和多余空白。这些信息对线上运行没有帮助，却会增加代码体积。通过本地优化，可以在尽量保持视觉一致的前提下，让 SVG 更轻、更适合生产环境。
+    </p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>减少体积：</strong> 在嵌入 HTML、CSS 或组件代码前先压缩 SVG 源码。</li>
+      <li><strong>保留缩放能力：</strong> 默认保留 <code>viewBox</code>，避免图标失去响应式缩放能力。</li>
+      <li><strong>本地处理：</strong> 压缩过程完全在浏览器中完成，不上传服务器。</li>
+    </ul>
+
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      常见问题解答 (FAQ)
+    </h2>
+    <div class="flex flex-col gap-6">
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">优化后会改变 SVG 外观吗？</h3>
+        <p class="text-slate-600">
+          默认配置偏保守：会移除冗余代码，同时保留 <code>viewBox</code> 以及 <code>fill</code>、<code>stroke</code> 等视觉属性。
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">我的 SVG 会被上传吗？</h3>
+        <p class="text-slate-600">
+          不会。SVGO 会被打包进前端页面，所有优化逻辑都在您的浏览器本地执行。
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>
