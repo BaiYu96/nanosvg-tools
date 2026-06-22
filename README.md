@@ -17,6 +17,8 @@ A lightweight, blazing-fast, and multi-language SVG developer toolbox built with
   - **CSS Data URI:** Properly escaped symbols (`#`, `{`, `}`, `<`, `>`, etc.) optimized directly for CSS `background-image` use.
   - **Base64 String:** Raw base64 encoding suitable for HTML `<img>` src tags.
 - **SVG Optimizer:** Compress SVG markup locally with SVGO, compare file sizes, and preview original vs optimized output.
+- **SVG to React Component:** Convert SVG markup into JSX or TSX components with prop spreading.
+- **SVG Sprite Generator:** Merge multiple SVG files into a symbol-based sprite and usage snippets.
 - **Enhanced UX:** Interactive textareas with "click-to-select-all" and one-click clipboard copying.
 
 ---
@@ -64,29 +66,55 @@ npm run build
 │   ├── components/
 │   │   └── SvgConverter.astro  # Core toolbox component with clean tech-focused comments
 │   │   └── SvgOptimizer.astro  # Local SVGO-powered optimizer component
+│   │   └── SvgComponentConverter.astro
+│   │   └── SvgSpriteGenerator.astro
 │   ├── layouts/
 │   │   └── Layout.astro        # Global layout with language switcher
 │   └── pages/                  # File-based i18n routing
 │       ├── index.astro         # Default English Landing
 │       ├── optimizer/
 │       │   └── index.astro     # English SVG Optimizer
+│       ├── component/
+│       │   └── index.astro     # English SVG to React Component
+│       ├── sprite/
+│       │   └── index.astro     # English SVG Sprite Generator
 │       ├── zh/
 │       │   ├── index.astro     # Simplified Chinese Landing
 │       │   └── optimizer/      # Simplified Chinese SVG Optimizer
+│       │   └── component/      # Simplified Chinese Component Converter
+│       │   └── sprite/         # Simplified Chinese Sprite Generator
 │       └── de/
 │           ├── index.astro     # German Landing
 │           └── optimizer/      # German SVG Optimizer
+│           └── component/      # German Component Converter
+│           └── sprite/         # German Sprite Generator
 ```
 
 ## 🗺️ Roadmap (All-in-One Toolbox)
 
-We are actively expanding this tool into an All-in-One SVG Suite. Current and upcoming features include:
+We are actively expanding this tool into an All-in-One SVG Suite.
+
+### Completed
 
 - [x] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
 
-- [ ] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React/Vue components.
+- [x] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React components.
 
-- [ ] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
+- [x] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
+
+### Upcoming
+
+Next, we plan to add more export and conversion tools:
+
+- [ ] SVG to PNG
+
+- [ ] SVG to JPG
+
+- [ ] SVG to WebP
+
+- [ ] SVG to PDF
+
+- [ ] SVG to Icon
 
 ## 📄 License
 

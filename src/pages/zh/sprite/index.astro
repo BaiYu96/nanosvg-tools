@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgSpriteGenerator from '../../../components/SvgSpriteGenerator.astro';
+---
+
+<Layout
+  title="SVG Sprite 精灵图生成器 - 多图标本地合并"
+  description="在浏览器本地将多个 SVG 图标合并为一个 SVG Sprite，生成 symbol、use 用法代码，并支持复制或下载。"
+>
+  <SvgSpriteGenerator />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">为什么使用 SVG Sprite？</h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">Sprite 可以把多个小图标合并成一个可复用的 SVG 定义，每个图标都变成独立 symbol，再通过简短的 use 标签引用。</p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>批量合并：</strong>选择多个 SVG 文件，一次生成一个 sprite。</li>
+      <li><strong>稳定 ID：</strong>根据文件名生成清晰可读的 symbol id。</li>
+      <li><strong>复制或下载：</strong>可以直接内联使用，也可以保存为 sprite.svg。</li>
+    </ul>
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">常见问题解答 (FAQ)</h2>
+    <p class="text-slate-600">所有文件都通过浏览器 File API 本地读取，不会上传到服务器。</p>
+  </article>
+</Layout>

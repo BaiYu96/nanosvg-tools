@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgComponentConverter from '../../../components/SvgComponentConverter.astro';
+---
+
+<Layout
+  title="SVG 转 React 组件工具 - JSX / TSX 在线转换"
+  description="在浏览器本地将 SVG 源码转换为 React JSX 或 TSX 组件，支持预览、一键复制和常见属性转换。"
+>
+  <SvgComponentConverter />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">为什么要把 SVG 转成组件？</h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">组件化图标更容易复用、传入 className 或样式属性，也更适合现代前端工程。该工具会处理常见 SVG 到 JSX 的属性命名差异，并保持纯前端本地运行。</p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>支持 JSX / TSX：</strong>可在普通 React 组件和带类型的组件间切换。</li>
+      <li><strong>支持 props：</strong>生成代码会把 props 展开到根 SVG 上。</li>
+      <li><strong>安全预览：</strong>渲染前会清理脚本类内容。</li>
+    </ul>
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">常见问题解答 (FAQ)</h2>
+    <p class="text-slate-600">当前输出面向 React 项目。Vue 组件转换可以作为后续模式继续扩展。</p>
+  </article>
+</Layout>

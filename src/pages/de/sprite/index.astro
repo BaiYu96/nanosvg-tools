@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgSpriteGenerator from '../../../components/SvgSpriteGenerator.astro';
+---
+
+<Layout
+  title="SVG Sprite Generator - Icons lokal zusammenführen"
+  description="Kombinieren Sie mehrere SVG-Icons lokal im Browser zu einem SVG-Sprite mit Symbolen, Use-Snippets, Kopieren und Download."
+>
+  <SvgSpriteGenerator />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Warum SVG-Sprites verwenden?</h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">Sprites bündeln viele kleine Icons in einer wiederverwendbaren SVG-Definition. Jedes Icon wird zu einem Symbol und kann per use-Tag referenziert werden.</p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>Icons bündeln:</strong> Wählen Sie mehrere SVG-Dateien und erzeugen Sie ein Sprite.</li>
+      <li><strong>Klare IDs:</strong> Dateinamen werden zu vorhersehbaren Symbol-IDs.</li>
+      <li><strong>Kopieren oder Download:</strong> Nutzen Sie das Sprite inline oder speichern Sie es als Datei.</li>
+    </ul>
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Häufig gestellte Fragen (FAQ)</h2>
+    <p class="text-slate-600">Alle Dateien werden lokal mit der Browser File API gelesen. Es gibt keinen Server-Upload.</p>
+  </article>
+</Layout>

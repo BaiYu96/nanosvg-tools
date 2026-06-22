@@ -1,0 +1,282 @@
+---
+const currentLang = Astro.currentLocale || 'en';
+
+const t = {
+  en: {
+    title1: "1. Paste SVG Code",
+    subtitle1: "Convert raw SVG markup into a clean React component locally.",
+    name: "Component name",
+    mode: "Output mode",
+    jsx: "JSX",
+    tsx: "TSX",
+    placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
+    title2: "2. Component Output",
+    copy: "Copy",
+    copied: "Copied!",
+    preview: "SVG Preview",
+    placeholderOutput: "React component code will appear here...",
+    invalid: "Invalid SVG code structure.",
+    empty: "Paste an SVG first."
+  },
+  zh: {
+    title1: "1. 粘贴 SVG 代码",
+    subtitle1: "在浏览器本地将原始 SVG 转换为干净的 React 组件。",
+    name: "组件名称",
+    mode: "输出模式",
+    jsx: "JSX",
+    tsx: "TSX",
+    placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
+    title2: "2. 组件代码",
+    copy: "复制",
+    copied: "已复制!",
+    preview: "SVG 预览",
+    placeholderOutput: "React 组件代码将在此处生成...",
+    invalid: "SVG 代码结构无效，请检查。",
+    empty: "请先粘贴 SVG。"
+  },
+  de: {
+    title1: "1. SVG-Code einfügen",
+    subtitle1: "Konvertieren Sie SVG-Markup lokal in eine saubere React-Komponente.",
+    name: "Komponentenname",
+    mode: "Ausgabemodus",
+    jsx: "JSX",
+    tsx: "TSX",
+    placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
+    title2: "2. Komponenten-Ausgabe",
+    copy: "Kopieren",
+    copied: "Kopiert!",
+    preview: "SVG-Vorschau",
+    placeholderOutput: "React-Komponentencode wird hier angezeigt...",
+    invalid: "Ungültige SVG-Codestruktur.",
+    empty: "Fügen Sie zuerst ein SVG ein."
+  }
+}[currentLang as 'en' | 'zh' | 'de'];
+---
+
+<section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-6">
+  <div>
+    <h2 class="text-lg font-bold text-slate-900">{t.title1}</h2>
+    <p class="text-xs text-slate-500 mt-1">{t.subtitle1}</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3">
+    <label class="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+      {t.name}
+      <input
+        id="componentName"
+        value="SvgIcon"
+        class="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 font-mono text-xs focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+      />
+    </label>
+    <div class="flex flex-col gap-1 text-xs font-semibold text-slate-600">
+      <span>{t.mode}</span>
+      <div class="grid grid-cols-2 rounded-xl border border-slate-300 bg-slate-50 p-1">
+        <button id="modeJsx" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900">{t.jsx}</button>
+        <button id="modeTsx" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">{t.tsx}</button>
+      </div>
+    </div>
+  </div>
+
+  <textarea
+    id="componentInput"
+    rows="8"
+    class="w-full p-4 border border-slate-300 rounded-xl font-mono text-xs focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 bg-slate-50"
+    placeholder={t.placeholderInput}
+  ></textarea>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-4">
+    <div class="flex flex-col gap-3">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-lg font-bold text-slate-900">{t.title2}</h2>
+        <button id="copyComponent" data-text={t.copy} class="text-indigo-600 hover:text-indigo-800 font-bold px-2 py-1 bg-indigo-50 rounded hover:bg-indigo-100 transition-colors text-xs">{t.copy}</button>
+      </div>
+      <textarea
+        id="componentOutput"
+        readonly
+        rows="14"
+        class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-600 break-all focus:outline-none focus:ring-1 focus:ring-indigo-500 transition-all cursor-text"
+        placeholder={t.placeholderOutput}
+      ></textarea>
+      <p id="componentStatus" class="min-h-4 text-xs font-semibold text-red-600"></p>
+    </div>
+    <div class="flex flex-col gap-2">
+      <span class="text-xs font-semibold text-slate-600">{t.preview}</span>
+      <div class="min-h-[220px] rounded-xl border border-slate-200 bg-slate-50 p-6 flex items-center justify-center">
+        <div id="componentPreview" class="max-w-[160px] max-h-[160px] flex items-center justify-center"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<input type="hidden" id="componentInvalidMsg" value={t.invalid} />
+<input type="hidden" id="componentEmptyMsg" value={t.empty} />
+<input type="hidden" id="componentCopiedMsg" value={t.copied} />
+
+<script>
+  const input = document.getElementById('componentInput') as HTMLTextAreaElement;
+  const output = document.getElementById('componentOutput') as HTMLTextAreaElement;
+  const nameInput = document.getElementById('componentName') as HTMLInputElement;
+  const status = document.getElementById('componentStatus');
+  const preview = document.getElementById('componentPreview');
+  const copyButton = document.getElementById('copyComponent') as HTMLButtonElement;
+  const modeJsx = document.getElementById('modeJsx') as HTMLButtonElement;
+  const modeTsx = document.getElementById('modeTsx') as HTMLButtonElement;
+  const invalidMsg = (document.getElementById('componentInvalidMsg') as HTMLInputElement)?.value || 'Invalid SVG code structure.';
+  const emptyMsg = (document.getElementById('componentEmptyMsg') as HTMLInputElement)?.value || 'Paste an SVG first.';
+  const copiedMsg = (document.getElementById('componentCopiedMsg') as HTMLInputElement)?.value || 'Copied!';
+
+  let outputMode: 'jsx' | 'tsx' = 'jsx';
+
+  const attrMap: Record<string, string> = {
+    'class': 'className',
+    'clip-rule': 'clipRule',
+    'fill-rule': 'fillRule',
+    'stroke-linecap': 'strokeLinecap',
+    'stroke-linejoin': 'strokeLinejoin',
+    'stroke-miterlimit': 'strokeMiterlimit',
+    'stroke-width': 'strokeWidth',
+    'stroke-dasharray': 'strokeDasharray',
+    'stroke-dashoffset': 'strokeDashoffset',
+    'stop-color': 'stopColor',
+    'stop-opacity': 'stopOpacity',
+    'color-interpolation-filters': 'colorInterpolationFilters',
+    'font-family': 'fontFamily',
+    'font-size': 'fontSize',
+    'font-weight': 'fontWeight',
+    'xml:space': 'xmlSpace',
+    'xlink:href': 'href'
+  };
+
+  const parseSvg = (svgCode: string) => {
+    const doc = new DOMParser().parseFromString(svgCode, 'image/svg+xml');
+    if (doc.querySelector('parsererror')) return null;
+    const svg = doc.documentElement;
+    if (!svg || svg.tagName.toLowerCase() !== 'svg') return null;
+    return svg;
+  };
+
+  const sanitizeSvgElement = (svg: SVGElement) => {
+    const clone = svg.cloneNode(true) as SVGElement;
+    clone.querySelectorAll('script, foreignObject').forEach((node) => node.remove());
+    clone.querySelectorAll('*').forEach((node) => {
+      [...node.attributes].forEach((attr) => {
+        const name = attr.name.toLowerCase();
+        const value = attr.value.trim().toLowerCase();
+        if (name.startsWith('on') || value.startsWith('javascript:')) {
+          node.removeAttribute(attr.name);
+        }
+      });
+    });
+    return clone;
+  };
+
+  const toPascalCase = (value: string) => {
+    const clean = value.replace(/[^a-zA-Z0-9]+/g, ' ').trim();
+    const name = clean
+      ? clean.split(/\s+/).map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join('')
+      : 'SvgIcon';
+    return /^[A-Z]/.test(name) ? name : `Svg${name}`;
+  };
+
+  const toStyleObject = (styleText: string) => {
+    const entries = styleText.split(';')
+      .map((entry) => entry.trim())
+      .filter(Boolean)
+      .map((entry) => {
+        const [rawKey, ...rawValue] = entry.split(':');
+        const key = rawKey.trim().replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+        const value = rawValue.join(':').trim().replace(/"/g, '\\"');
+        return key && value ? `${key}: "${value}"` : '';
+      })
+      .filter(Boolean);
+
+    return entries.length ? `{{ ${entries.join(', ')} }}` : undefined;
+  };
+
+  const serializeNode = (node: Element) => {
+    [...node.attributes].forEach((attr) => {
+      if (attr.name === 'style') {
+        const styleObject = toStyleObject(attr.value);
+        if (styleObject) {
+          node.setAttribute('style', styleObject);
+        }
+        return;
+      }
+
+      const mapped = attrMap[attr.name] || attr.name.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+      if (mapped !== attr.name) {
+        node.removeAttribute(attr.name);
+        node.setAttribute(mapped, attr.value);
+      }
+    });
+    node.querySelectorAll('*').forEach((child) => serializeNode(child));
+    return new XMLSerializer().serializeToString(node)
+      .replace(/\sxmlns(:xlink)?="[^"]*"/g, '')
+      .replace(/style="(\{\{[^"]+\}\})"/g, (_, value) => `style=${value.replace(/&quot;/g, '"')}`)
+      .replace(/><\/(path|circle|rect|line|polyline|polygon|stop|use)>/g, ' />')
+      .replace(/></g, '>\n  <');
+  };
+
+  const buildComponent = (svg: SVGElement, componentName: string) => {
+    const jsxSvg = serializeNode(svg);
+    if (outputMode === 'tsx') {
+      return `import type { SVGProps } from 'react';\n\nexport default function ${componentName}(props: SVGProps<SVGSVGElement>) {\n  return (\n    ${jsxSvg.replace('<svg', '<svg {...props}')}\n  );\n}\n`;
+    }
+
+    return `export default function ${componentName}(props) {\n  return (\n    ${jsxSvg.replace('<svg', '<svg {...props}')}\n  );\n}\n`;
+  };
+
+  const renderPreview = (svg: SVGElement) => {
+    if (!preview) return;
+    const clone = sanitizeSvgElement(svg);
+    clone.setAttribute('width', '100%');
+    clone.setAttribute('height', '100%');
+    preview.replaceChildren(document.importNode(clone, true));
+  };
+
+  const convert = () => {
+    const source = input.value.trim();
+    status!.textContent = '';
+    if (!source) {
+      output.value = '';
+      preview?.replaceChildren();
+      return;
+    }
+
+    const parsed = parseSvg(source);
+    if (!parsed) {
+      output.value = '';
+      preview?.replaceChildren();
+      status!.textContent = source ? invalidMsg : emptyMsg;
+      return;
+    }
+
+    const cleanSvg = sanitizeSvgElement(parsed);
+    renderPreview(cleanSvg);
+    output.value = buildComponent(cleanSvg, toPascalCase(nameInput.value));
+  };
+
+  const setMode = (mode: 'jsx' | 'tsx') => {
+    outputMode = mode;
+    modeJsx.className = mode === 'jsx'
+      ? 'rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900'
+      : 'rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900';
+    modeTsx.className = mode === 'tsx'
+      ? 'rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900'
+      : 'rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900';
+    convert();
+  };
+
+  input?.addEventListener('input', convert);
+  nameInput?.addEventListener('input', convert);
+  modeJsx?.addEventListener('click', () => setMode('jsx'));
+  modeTsx?.addEventListener('click', () => setMode('tsx'));
+  output?.addEventListener('click', () => output.value && output.select());
+  copyButton?.addEventListener('click', () => {
+    if (!output.value) return;
+    navigator.clipboard.writeText(output.value);
+    const originalText = copyButton.getAttribute('data-text') || 'Copy';
+    copyButton.innerText = copiedMsg;
+    setTimeout(() => copyButton.innerText = originalText, 1500);
+  });
+</script>

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SvgSpriteGenerator from '../../components/SvgSpriteGenerator.astro';
+---
+
+<Layout
+  title="Free SVG Sprite Generator - Merge Icons Locally"
+  description="Combine multiple SVG icons into a single SVG sprite locally in your browser. Generate symbols, usage snippets, copy markup, or download sprite.svg."
+>
+  <SvgSpriteGenerator />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Why Use SVG Sprites?</h2>
+    <p class="mb-4 text-sm">Sprites let teams bundle many small icons into one reusable SVG definition. Each icon becomes a symbol that can be referenced with a short use tag.</p>
+    <ul class="list-disc pl-5 mb-6 text-sm flex flex-col gap-2">
+      <li><strong>Batch Icons:</strong> Select multiple SVG files and generate one sprite.</li>
+      <li><strong>Clean IDs:</strong> File names become predictable symbol IDs.</li>
+      <li><strong>Copy or Download:</strong> Use the sprite inline or save it as a file.</li>
+    </ul>
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Frequently Asked Questions (FAQ)</h2>
+    <p class="text-sm text-slate-600">All files are read with the browser File API. Nothing is uploaded to a server.</p>
+  </article>
+</Layout>

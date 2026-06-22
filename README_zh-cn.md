@@ -17,6 +17,8 @@
   - **CSS Data URI:** 针对 CSS `background-image` 深度优化，对特定关键字符（如 `#`, `{`, `}`, `<`, `>` 等）进行精准转义，避免多浏览器兼容性崩溃。
   - **Base64 字符串:** 标准的 Base64 编码，完美契合 HTML `<img>` 标签的 src 属性。
 - **SVG 压缩优化:** 使用 SVGO 在浏览器本地压缩 SVG，支持体积对比、原图与优化后预览。
+- **SVG 转 React 组件:** 将 SVG 源码转换为 JSX 或 TSX 组件，并支持 props 透传。
+- **SVG Sprite 生成器:** 将多个 SVG 文件合并为基于 symbol 的精灵图和 use 用法代码。
 - **极佳交互体验:** 输出文本框支持“点击即全选”以及“一键复制到剪贴板”，大幅提升开发搬砖效率。
 
 ---
@@ -64,27 +66,53 @@
 │   ├── components/
 │   │   └── SvgConverter.astro  # 核心转换组件（内含工业级规范中文技术注释）
 │   │   └── SvgOptimizer.astro  # 基于 SVGO 的本地压缩优化组件
+│   │   └── SvgComponentConverter.astro
+│   │   └── SvgSpriteGenerator.astro
 │   ├── layouts/
 │   │   └── Layout.astro        # 全局公共布局（含多语言导航切换）
 │   └── pages/                  # 基于文件系统的国际化路由
 │       ├── index.astro         # 英文默认主页
 │       ├── optimizer/
 │       │   └── index.astro     # 英文 SVG 压缩优化页
+│       ├── component/
+│       │   └── index.astro     # 英文 SVG 转组件页
+│       ├── sprite/
+│       │   └── index.astro     # 英文 SVG Sprite 页
 │       ├── zh/
 │       │   ├── index.astro     # 简体中文主页
 │       │   └── optimizer/      # 简体中文 SVG 压缩优化页
+│       │   └── component/      # 简体中文 SVG 转组件页
+│       │   └── sprite/         # 简体中文 SVG Sprite 页
 │       └── de/
 │           ├── index.astro     # 德文主页
 │           └── optimizer/      # 德文 SVG 压缩优化页
+│           └── component/      # 德文 SVG 转组件页
+│           └── sprite/         # 德文 SVG Sprite 页
 ```
 ## 🗺️ 后续功能规划
-我们计划将该项目逐步升级为 "一站式 SVG 万能工具箱"，当前与后续功能包括：
+我们计划将该项目逐步升级为 "一站式 SVG 万能工具箱"。
+
+### 已完成功能
 
 - [x] SVG 压缩优化 (SVG Optimizer): 纯前端集成 SVGO 核心逻辑，快速剔除设计软件导出的冗余元数据。
 
-- [ ] SVG 转组件 (SVG to JSX/TSX): 将原始 SVG 转换为干净的、可直接复制使用的 React/Vue 组件。
+- [x] SVG 转组件 (SVG to JSX/TSX): 将原始 SVG 转换为干净的、可直接复制使用的 React 组件。
 
-- [ ] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
+- [x] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
+
+### 后续将实现
+
+接下来我们将继续补齐更多 SVG 导出与格式转换工具：
+
+- [ ] SVG 转 PNG
+
+- [ ] SVG 转 JPG
+
+- [ ] SVG 转 WebP
+
+- [ ] SVG 转 PDF
+
+- [ ] SVG 转 Icon
 
 ## 📄 开源协议
 本项目采用 Apache-2.0 license 开源协议。
