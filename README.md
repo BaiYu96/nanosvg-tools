@@ -72,6 +72,8 @@ npm run build
 │   │   └── Layout.astro        # Global layout with language switcher
 │   └── pages/                  # File-based i18n routing
 │       ├── index.astro         # Default English Landing
+│       ├── svg2base64/
+│       │   └── index.astro     # English SVG to Base64 Converter
 │       ├── optimizer/
 │       │   └── index.astro     # English SVG Optimizer
 │       ├── component/
@@ -79,12 +81,14 @@ npm run build
 │       ├── sprite/
 │       │   └── index.astro     # English SVG Sprite Generator
 │       ├── zh/
-│       │   ├── index.astro     # Simplified Chinese Landing
+│       │   ├── index.astro     # Simplified Chinese Tool Directory
+│       │   └── svg2base64/     # Simplified Chinese SVG to Base64
 │       │   └── optimizer/      # Simplified Chinese SVG Optimizer
 │       │   └── component/      # Simplified Chinese Component Converter
 │       │   └── sprite/         # Simplified Chinese Sprite Generator
 │       └── de/
-│           ├── index.astro     # German Landing
+│           ├── index.astro     # German Tool Directory
+│           └── svg2base64/     # German SVG to Base64
 │           └── optimizer/      # German SVG Optimizer
 │           └── component/      # German Component Converter
 │           └── sprite/         # German Sprite Generator
@@ -95,6 +99,8 @@ npm run build
 We are actively expanding this tool into an All-in-One SVG Suite.
 
 ### Completed
+
+- [x] SVG to Base64: Convert SVG code into CSS Data URI and Base64 strings.
 
 - [x] SVG Optimizer: Minify bloated SVG codes using SVGO logic locally.
 

@@ -1,0 +1,43 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgConverter from '../../../components/SvgConverter.astro';
+---
+
+<Layout
+  title="Kostenloser Online SVG zu Base64 & CSS Data URI Konverter - 100% Lokal im Browser"
+  description="Ein leichtgewichtiges Online-Tool für Frontend-Entwickler. Konvertieren Sie SVG-Code sofort in CSS Data URI-Hintergrundbilder oder native Base64-Strings. Keine Server-Uploads, 100% Datenschutz garantiert."
+>
+  <SvgConverter />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Warum SVG in Base64 oder CSS Data URI konvertieren?
+    </h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">
+      Durch das direkte Einbetten des SVG-Codes als <strong>Base64-Codierung</strong> oder <strong>CSS-Hintergrundbild Data URI</strong> können kleine Icons ohne zusätzliche Netzwerkanfrage geladen werden.
+    </p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>Null Netzwerk-Anfragen:</strong> Grafiken werden direkt mit CSS oder HTML geladen.</li>
+      <li><strong>Weniger Layout-Probleme:</strong> Verhindert Verzögerungen durch externe Icon-Dateien.</li>
+      <li><strong>Einfacheres Asset-Management:</strong> Kleine Icons können direkt im Code bleiben.</li>
+    </ul>
+
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      Häufig gestellte Fragen (FAQ)
+    </h2>
+    <div class="flex flex-col gap-6">
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">Sind meine Quellcodes sicher?</h3>
+        <p class="text-slate-600">
+          Ja. Die Konvertierung läuft vollständig lokal im Browser. Ihr SVG-Code wird nicht hochgeladen.
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">Wird Base64 größer?</h3>
+        <p class="text-slate-600">
+          Ja. Base64 erhöht die Größe meist um etwa <strong>33%</strong> und eignet sich daher besonders für kleine Icons.
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

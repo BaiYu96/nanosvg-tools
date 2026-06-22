@@ -1,0 +1,43 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SvgConverter from '../../../components/SvgConverter.astro';
+---
+
+<Layout
+  title="SVG 转 Base64 & CSS Data URI 免费在线转换工具 - 100% 浏览器本地处理"
+  description="一款专为前端开发者设计的轻量级 SVG 在线转换工具。支持将 SVG 源码即时转换为 CSS Data URI 背景图或原生的 Base64 字符串。无需上传服务器，100% 保护隐私，即输即现。"
+>
+  <SvgConverter />
+
+  <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
+    <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      为什么需要将 SVG 转换为 Base64 或 CSS Data URI？
+    </h2>
+    <p class="mb-4 text-slate-600 leading-relaxed">
+      在现代前端网页性能优化中，减少页面的<strong>关键 HTTP 请求数</strong>是提升加载速度的重要手段。通过将 SVG 代码直接转换为 <strong>Base64 编码</strong> 或 <strong>CSS 背景图 Data URI</strong>，你可以将图形数据直接内联嵌入到样式表或 HTML 之中。
+    </p>
+    <ul class="list-disc pl-5 mb-6 flex flex-col gap-2 text-slate-600">
+      <li><strong>零网络请求：</strong>图形随 CSS/HTML 一同下载，无需等待二次请求。</li>
+      <li><strong>杜绝加载闪烁：</strong>避免因网络延迟导致页面图标出现空白或错位。</li>
+      <li><strong>资产管理极简：</strong>无需管理大量微小图标文件，代码即资产。</li>
+    </ul>
+
+    <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
+      常见问题解答 (FAQ)
+    </h2>
+    <div class="flex flex-col gap-6">
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">使用这款工具，我的源码安全吗？</h3>
+        <p class="text-slate-600">
+          安全。所有转码和渲染逻辑都在浏览器本地完成，SVG 源码不会上传到服务器。
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-slate-800 mb-1">转换为 Base64 会导致文件体积变大吗？</h3>
+        <p class="text-slate-600">
+          会。Base64 编码通常会增加约 <strong>33%</strong> 的体积，因此更适合小图标、UI 指示器和 Logo。
+        </p>
+      </div>
+    </div>
+  </article>
+</Layout>

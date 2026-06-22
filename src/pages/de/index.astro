@@ -1,55 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import SvgConverter from '../../components/SvgConverter.astro';
+import ToolDirectory from '../../components/ToolDirectory.astro';
 ---
 
-<Layout 
-	title="Kostenloser Online SVG zu Base64 & CSS Data URI Konverter - 100% Lokal im Browser"
-	description="Ein leichtgewichtiges Online-Tool für Frontend-Entwickler. Konvertieren Sie SVG-Code sofort in CSS Data URI-Hintergrundbilder oder native Base64-Strings. Keine Server-Uploads, 100% Datenschutz garantiert."
+<Layout
+  title="NanoSVG Tools - Lokale SVG Entwickler-Toolbox"
+  description="Eine 100% clientseitige SVG-Toolbox für Base64-Konvertierung, Optimierung, React-Komponenten, Sprites und kommende Export-Tools."
 >
-	<SvgConverter />
-
-	<article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed text-sm">
-		<h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
-			Warum SVG in Base64 oder CSS Data URI konvertieren?
-		</h2>
-		<p class="mb-4 text-slate-600 leading-relaxed">
-			Bei der Optimierung der Web-Performance ist die Reduzierung der <strong>Anzahl kritischer HTTP-Anfragen</strong> der Schlüssel zur Beschleunigung der Ladezeiten. Wenn Sie viele kleine Icons oder Vektorgrafiken in einem Projekt verwenden, erzeugt jede einzelne <code>.svg</code>-Datei einen separaten Netzwerk-Request.
-		</p>
-		<p class="mb-4 text-slate-600 leading-relaxed">
-			Durch das direkte Einbetten des SVG-Codes als <strong>Base64-Codierung</strong> oder <strong>CSS-Hintergrundbild (Data URI)</strong> können Sie Grafikdaten direkt in Ihre Stylesheets oder Ihr HTML integrieren:
-		</p>
-		<ul class="list-box pl-5 mb-6 flex flex-col gap-2 text-slate-600">
-			<li><strong>Null Netzwerk-Anfragen:</strong> Die Grafiken werden zusammen mit CSS/HTML heruntergeladen – kein Warten auf sekundäre Anfragen, sofortiges Rendering.</li>
-			<li><strong>Kein FOUC (Flash of Unstyled Content):</strong> Verhindert, dass Symbole aufgrund von Netzwerkverzögerungen im Moment des Ladens leer oder verzerrt erscheinen.</li>
-			<li><strong>Vereinfachtes Asset-Management:</strong> Keine Notwendigkeit mehr, hunderte winziger Icon-Dateien in Ihren Projektverzeichnissen zu verwalten.</li>
-		</ul>
-
-		<h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">
-			Häufig gestellte Fragen (FAQ)
-		</h2>
-		<div class="flex flex-col gap-6">
-			<div>
-				<h3 class="font-bold text-slate-800 mb-1">🔒 Sind meine Quellcodes bei der Nutzung dieses Tools sicher?</h3>
-				<p class="text-slate-600">
-					Absolut. Viele aufgeblähte Konverter-Websites laden Ihre Quelldateien zur Verarbeitung auf remote Cloud-Server hoch, was ein Sicherheitsrisiko darstellt. Unser Tool arbeitet <strong>zu 100% über eine reine Frontend-Sandbox im Browser</strong>. Alle Konformitäts- und Rendering-Logiken werden vollständig auf Ihrem lokalen Computer über JavaScript ausgeführt. <strong>Es fließen keinerlei Daten ins Internet.</strong>
-				</p>
-			</div>
-
-			<div>
-				<h3 class="font-bold text-slate-800 mb-1">⚠️ Führt die Konvertierung in Base64 zu größeren Dateien?</h3>
-				<p class="text-slate-600">
-					Ja. Nach der Base64-Codierung von Text- oder Binärdaten erhöht sich die Dateigröße in der Regel um etwa <strong>33%</strong>. Für sehr komplexe, extrem große SVG-Illustrationen empfehlen wir daher weiterhin das Hosting als separate Datei. Für kleine Icons, UI-Indikatoren und Logos unter <strong>5 KB</strong> ist der Performance-Gewinn durch die eingesparte HTTP-Anfrage jedoch weitaus wertvoller als der minimale Zuwachs der Dateigröße.
-				</p>
-			</div>
-
-			<div>
-				<h3 class="font-bold text-slate-800 mb-1">🛠️ Wie verwende ich die generierte CSS Data URI in meinem Projekt?</h3>
-				<p class="text-slate-600">
-					Kopieren Sie einfach den generierten Code direkt in eine beliebige CSS-Klasse. Zum Beispiel:<br/>
-					<code class="block bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono mt-1 text-indigo-600 leading-normal">.icon-arrow &#123; width: 24px; height: 24px; background-image: url("data:image/svg+xml;..."); &#125;</code>
-				</p>
-			</div>
-		</div>
-	</article>
+  <ToolDirectory />
 </Layout>

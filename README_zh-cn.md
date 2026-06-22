@@ -72,6 +72,8 @@
 │   │   └── Layout.astro        # 全局公共布局（含多语言导航切换）
 │   └── pages/                  # 基于文件系统的国际化路由
 │       ├── index.astro         # 英文默认主页
+│       ├── svg2base64/
+│       │   └── index.astro     # 英文 SVG 转 Base64 页
 │       ├── optimizer/
 │       │   └── index.astro     # 英文 SVG 压缩优化页
 │       ├── component/
@@ -79,12 +81,14 @@
 │       ├── sprite/
 │       │   └── index.astro     # 英文 SVG Sprite 页
 │       ├── zh/
-│       │   ├── index.astro     # 简体中文主页
+│       │   ├── index.astro     # 简体中文工具导航页
+│       │   └── svg2base64/     # 简体中文 SVG 转 Base64 页
 │       │   └── optimizer/      # 简体中文 SVG 压缩优化页
 │       │   └── component/      # 简体中文 SVG 转组件页
 │       │   └── sprite/         # 简体中文 SVG Sprite 页
 │       └── de/
-│           ├── index.astro     # 德文主页
+│           ├── index.astro     # 德文工具导航页
+│           └── svg2base64/     # 德文 SVG 转 Base64 页
 │           └── optimizer/      # 德文 SVG 压缩优化页
 │           └── component/      # 德文 SVG 转组件页
 │           └── sprite/         # 德文 SVG Sprite 页
@@ -93,6 +97,8 @@
 我们计划将该项目逐步升级为 "一站式 SVG 万能工具箱"。
 
 ### 已完成功能
+
+- [x] SVG 转 Base64: 将 SVG 代码转换为 CSS Data URI 和 Base64 字符串。
 
 - [x] SVG 压缩优化 (SVG Optimizer): 纯前端集成 SVGO 核心逻辑，快速剔除设计软件导出的冗余元数据。
 
