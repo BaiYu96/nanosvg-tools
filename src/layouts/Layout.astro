@@ -13,6 +13,8 @@ const converterUrl = currentLang === 'en' ? '/svg2base64/' : `/${currentLang}/sv
 const optimizerUrl = currentLang === 'en' ? '/optimizer/' : `/${currentLang}/optimizer/`;
 const componentUrl = currentLang === 'en' ? '/component/' : `/${currentLang}/component/`;
 const spriteUrl = currentLang === 'en' ? '/sprite/' : `/${currentLang}/sprite/`;
+const exportSlugs = ['svg2png', 'svg2jpg', 'svg2webp', 'svg2pdf', 'svg2icon'];
+const activeExportSlug = exportSlugs.find((slug) => pathname.includes(`/${slug}`));
 const isHome = pathname === '/' || pathname === '/zh/' || pathname === '/de/';
 const isConverter = pathname.includes('/svg2base64');
 const isOptimizer = pathname.includes('/optimizer');
@@ -95,9 +97,9 @@ const navText = {
 							onchange="location = this.value;" 
 							class="bg-slate-50 border border-slate-300 text-slate-700 py-1 px-2 rounded-md text-xs font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer"
 						>
-							<option value={isConverter ? '/svg2base64/' : isOptimizer ? '/optimizer/' : isComponent ? '/component/' : isSprite ? '/sprite/' : '/'} selected={currentLang === 'en'}>🇺🇸 English</option>
-							<option value={isConverter ? '/zh/svg2base64/' : isOptimizer ? '/zh/optimizer/' : isComponent ? '/zh/component/' : isSprite ? '/zh/sprite/' : '/zh/'} selected={currentLang === 'zh'}>🇨🇳 简体中文</option>
-							<option value={isConverter ? '/de/svg2base64/' : isOptimizer ? '/de/optimizer/' : isComponent ? '/de/component/' : isSprite ? '/de/sprite/' : '/de/'} selected={currentLang === 'de'}>🇩🇪 Deutsch</option>
+							<option value={activeExportSlug ? `/${activeExportSlug}/` : isConverter ? '/svg2base64/' : isOptimizer ? '/optimizer/' : isComponent ? '/component/' : isSprite ? '/sprite/' : '/'} selected={currentLang === 'en'}>🇺🇸 English</option>
+							<option value={activeExportSlug ? `/zh/${activeExportSlug}/` : isConverter ? '/zh/svg2base64/' : isOptimizer ? '/zh/optimizer/' : isComponent ? '/zh/component/' : isSprite ? '/zh/sprite/' : '/zh/'} selected={currentLang === 'zh'}>🇨🇳 简体中文</option>
+							<option value={activeExportSlug ? `/de/${activeExportSlug}/` : isConverter ? '/de/svg2base64/' : isOptimizer ? '/de/optimizer/' : isComponent ? '/de/component/' : isSprite ? '/de/sprite/' : '/de/'} selected={currentLang === 'de'}>🇩🇪 Deutsch</option>
 						</select>
 					</div>
 					<a

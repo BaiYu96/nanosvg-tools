@@ -19,6 +19,7 @@
 - **SVG 压缩优化:** 使用 SVGO 在浏览器本地压缩 SVG，支持体积对比、原图与优化后预览。
 - **SVG 转 React 组件:** 将 SVG 源码转换为 JSX 或 TSX 组件，并支持 props 透传。
 - **SVG Sprite 生成器:** 将多个 SVG 文件合并为基于 symbol 的精灵图和 use 用法代码。
+- **图片与文档导出:** 在浏览器本地将 SVG 转换为 PNG、JPG、WebP、PDF 和 ICO。
 - **极佳交互体验:** 输出文本框支持“点击即全选”以及“一键复制到剪贴板”，大幅提升开发搬砖效率。
 
 ---
@@ -74,6 +75,11 @@
 │       ├── index.astro         # 英文默认主页
 │       ├── svg2base64/
 │       │   └── index.astro     # 英文 SVG 转 Base64 页
+│       ├── svg2png/
+│       ├── svg2jpg/
+│       ├── svg2webp/
+│       ├── svg2pdf/
+│       ├── svg2icon/
 │       ├── optimizer/
 │       │   └── index.astro     # 英文 SVG 压缩优化页
 │       ├── component/
@@ -106,19 +112,15 @@
 
 - [x] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
 
-### 后续将实现
+- [x] SVG 转 PNG
 
-接下来我们将继续补齐更多 SVG 导出与格式转换工具：
+- [x] SVG 转 JPG
 
-- [ ] SVG 转 PNG
+- [x] SVG 转 WebP
 
-- [ ] SVG 转 JPG
+- [x] SVG 转 PDF
 
-- [ ] SVG 转 WebP
-
-- [ ] SVG 转 PDF
-
-- [ ] SVG 转 Icon
+- [x] SVG 转 Icon
 
 ## 📄 开源协议
 本项目采用 Apache-2.0 license 开源协议。

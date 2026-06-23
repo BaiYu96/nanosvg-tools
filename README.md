@@ -19,6 +19,7 @@ A lightweight, blazing-fast, and multi-language SVG developer toolbox built with
 - **SVG Optimizer:** Compress SVG markup locally with SVGO, compare file sizes, and preview original vs optimized output.
 - **SVG to React Component:** Convert SVG markup into JSX or TSX components with prop spreading.
 - **SVG Sprite Generator:** Merge multiple SVG files into a symbol-based sprite and usage snippets.
+- **Image & Document Export:** Convert SVG to PNG, JPG, WebP, PDF, and ICO locally with browser rendering.
 - **Enhanced UX:** Interactive textareas with "click-to-select-all" and one-click clipboard copying.
 
 ---
@@ -74,6 +75,11 @@ npm run build
 │       ├── index.astro         # Default English Landing
 │       ├── svg2base64/
 │       │   └── index.astro     # English SVG to Base64 Converter
+│       ├── svg2png/
+│       ├── svg2jpg/
+│       ├── svg2webp/
+│       ├── svg2pdf/
+│       ├── svg2icon/
 │       ├── optimizer/
 │       │   └── index.astro     # English SVG Optimizer
 │       ├── component/
@@ -108,19 +114,15 @@ We are actively expanding this tool into an All-in-One SVG Suite.
 
 - [x] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
 
-### Upcoming
+- [x] SVG to PNG
 
-Next, we plan to add more export and conversion tools:
+- [x] SVG to JPG
 
-- [ ] SVG to PNG
+- [x] SVG to WebP
 
-- [ ] SVG to JPG
+- [x] SVG to PDF
 
-- [ ] SVG to WebP
-
-- [ ] SVG to PDF
-
-- [ ] SVG to Icon
+- [x] SVG to Icon
 
 ## 📄 License
 

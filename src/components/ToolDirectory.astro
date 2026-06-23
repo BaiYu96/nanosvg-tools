@@ -35,9 +35,39 @@ const copy = {
         desc: 'Merge multiple SVG files into a symbol-based sprite with ready-to-use snippets.',
         href: pathFor('sprite'),
         accent: 'bg-amber-50 text-amber-700 border-amber-100'
+      },
+      {
+        name: 'SVG to PNG',
+        desc: 'Render SVG to a transparent or solid-background PNG with custom dimensions.',
+        href: pathFor('svg2png'),
+        accent: 'bg-rose-50 text-rose-700 border-rose-100'
+      },
+      {
+        name: 'SVG to JPG',
+        desc: 'Export SVG as a JPG with custom background color, size, and quality.',
+        href: pathFor('svg2jpg'),
+        accent: 'bg-orange-50 text-orange-700 border-orange-100'
+      },
+      {
+        name: 'SVG to WebP',
+        desc: 'Convert SVG to modern WebP with transparency and quality controls.',
+        href: pathFor('svg2webp'),
+        accent: 'bg-teal-50 text-teal-700 border-teal-100'
+      },
+      {
+        name: 'SVG to PDF',
+        desc: 'Create a single-page PDF from SVG artwork directly in the browser.',
+        href: pathFor('svg2pdf'),
+        accent: 'bg-red-50 text-red-700 border-red-100'
+      },
+      {
+        name: 'SVG to Icon',
+        desc: 'Generate a multi-size ICO file for favicons and desktop app icons.',
+        href: pathFor('svg2icon'),
+        accent: 'bg-violet-50 text-violet-700 border-violet-100'
       }
     ],
-    future: ['SVG to PNG', 'SVG to JPG', 'SVG to WebP', 'SVG to PDF', 'SVG to Icon']
+    future: []
   },
   zh: {
     title: 'NanoSVG Tools',
@@ -70,9 +100,39 @@ const copy = {
         desc: '将多个 SVG 文件合并为基于 symbol 的精灵图，并生成 use 用法代码。',
         href: pathFor('sprite'),
         accent: 'bg-amber-50 text-amber-700 border-amber-100'
+      },
+      {
+        name: 'SVG 转 PNG',
+        desc: '将 SVG 渲染为透明或纯色背景 PNG，并支持自定义尺寸。',
+        href: pathFor('svg2png'),
+        accent: 'bg-rose-50 text-rose-700 border-rose-100'
+      },
+      {
+        name: 'SVG 转 JPG',
+        desc: '将 SVG 导出为 JPG，支持背景色、尺寸和质量设置。',
+        href: pathFor('svg2jpg'),
+        accent: 'bg-orange-50 text-orange-700 border-orange-100'
+      },
+      {
+        name: 'SVG 转 WebP',
+        desc: '将 SVG 转换为现代 WebP 格式，支持透明背景和质量控制。',
+        href: pathFor('svg2webp'),
+        accent: 'bg-teal-50 text-teal-700 border-teal-100'
+      },
+      {
+        name: 'SVG 转 PDF',
+        desc: '在浏览器内将 SVG 图形生成单页 PDF 文件。',
+        href: pathFor('svg2pdf'),
+        accent: 'bg-red-50 text-red-700 border-red-100'
+      },
+      {
+        name: 'SVG 转 Icon',
+        desc: '生成适用于 favicon 和应用图标的多尺寸 ICO 文件。',
+        href: pathFor('svg2icon'),
+        accent: 'bg-violet-50 text-violet-700 border-violet-100'
       }
     ],
-    future: ['SVG 转 PNG', 'SVG 转 JPG', 'SVG 转 WebP', 'SVG 转 PDF', 'SVG 转 Icon']
+    future: []
   },
   de: {
     title: 'NanoSVG Tools',
@@ -105,9 +165,39 @@ const copy = {
         desc: 'Führen Sie mehrere SVG-Dateien zu einem symbolbasierten Sprite mit Use-Snippets zusammen.',
         href: pathFor('sprite'),
         accent: 'bg-amber-50 text-amber-700 border-amber-100'
+      },
+      {
+        name: 'SVG zu PNG',
+        desc: 'Rendern Sie SVG als PNG mit transparentem oder festem Hintergrund.',
+        href: pathFor('svg2png'),
+        accent: 'bg-rose-50 text-rose-700 border-rose-100'
+      },
+      {
+        name: 'SVG zu JPG',
+        desc: 'Exportieren Sie SVG als JPG mit Hintergrundfarbe, Größe und Qualität.',
+        href: pathFor('svg2jpg'),
+        accent: 'bg-orange-50 text-orange-700 border-orange-100'
+      },
+      {
+        name: 'SVG zu WebP',
+        desc: 'Konvertieren Sie SVG in WebP mit Transparenz- und Qualitätsoptionen.',
+        href: pathFor('svg2webp'),
+        accent: 'bg-teal-50 text-teal-700 border-teal-100'
+      },
+      {
+        name: 'SVG zu PDF',
+        desc: 'Erstellen Sie lokal im Browser ein einseitiges PDF aus SVG.',
+        href: pathFor('svg2pdf'),
+        accent: 'bg-red-50 text-red-700 border-red-100'
+      },
+      {
+        name: 'SVG zu Icon',
+        desc: 'Erzeugen Sie eine mehrgrößige ICO-Datei für Favicons und App-Icons.',
+        href: pathFor('svg2icon'),
+        accent: 'bg-violet-50 text-violet-700 border-violet-100'
       }
     ],
-    future: ['SVG zu PNG', 'SVG zu JPG', 'SVG zu WebP', 'SVG zu PDF', 'SVG zu Icon']
+    future: []
   }
 }[currentLang as 'en' | 'zh' | 'de'];
 ---
@@ -138,14 +228,16 @@ const copy = {
   </div>
 </section>
 
-<section id="faq" class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6">
-  <h2 class="text-xl font-bold text-slate-950">{copy.upcoming}</h2>
-  <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
-    {copy.future.map((item) => (
-      <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
-        <p class="text-sm font-bold text-slate-800">{item}</p>
-        <p class="mt-1 text-xs font-semibold text-slate-400">{copy.soon}</p>
-      </div>
-    ))}
-  </div>
-</section>
+{copy.future.length > 0 && (
+  <section id="faq" class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6">
+    <h2 class="text-xl font-bold text-slate-950">{copy.upcoming}</h2>
+    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+      {copy.future.map((item) => (
+        <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+          <p class="text-sm font-bold text-slate-800">{item}</p>
+          <p class="mt-1 text-xs font-semibold text-slate-400">{copy.soon}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+)}
