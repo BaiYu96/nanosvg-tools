@@ -19,7 +19,7 @@
 - **SVG 压缩优化:** 使用 SVGO 在浏览器本地压缩 SVG，支持体积对比、原图与优化后预览。
 - **SVG 转 React 组件:** 将 SVG 源码转换为 JSX 或 TSX 组件，并支持 props 透传。
 - **SVG Sprite 生成器:** 将多个 SVG 文件合并为基于 symbol 的精灵图和 use 用法代码。
-- **图片与文档导出:** 在浏览器本地将 SVG 转换为 PNG、JPG、WebP、PDF 和 ICO。
+- **图片与文档导出:** 在浏览器本地将 SVG 转换为 PNG、JPG、WebP、PDF 和 ICO，支持拖拽上传、批量转换和 ZIP 下载。
 - **极佳交互体验:** 输出文本框支持“点击即全选”以及“一键复制到剪贴板”，大幅提升开发搬砖效率。
 
 ---
@@ -121,6 +121,26 @@
 - [x] SVG 转 PDF
 
 - [x] SVG 转 Icon
+
+### 计划开发
+
+- [ ] 统一文件拖拽与上传输入：覆盖 Base64、Optimizer、Component、Sprite 等工具。
+
+- [ ] 导出尺寸预设：支持 favicon、App Icon、社交分享图、自定义比例锁定。
+
+- [ ] SVG 颜色替换：识别 fill/stroke，批量替换品牌色，并支持一键转为 `currentColor`。
+
+- [ ] SVG viewBox 与尺寸修复：自动生成缺失 viewBox，移除固定宽高，让 SVG 响应式缩放。
+
+- [ ] SVG 转 CSS Mask：生成 `mask-image` 和 `-webkit-mask-image` 代码片段，方便单色图标换色。
+
+- [ ] SVG 转 Vue / Svelte 组件。
+
+- [ ] Icon Font 生成器：从 SVG 集合生成 WOFF2 字体、CSS class 和预览页面。
+
+- [ ] SVG 安全扫描：检测并清理 `script`、`foreignObject`、事件属性和 `javascript:` 链接。
+
+- [ ] SVG 兼容性检查：检测外链资源、缺失命名空间、filter、mask、clipPath 以及潜在浏览器兼容风险。
 
 ## 📄 开源协议
 本项目采用 Apache-2.0 license 开源协议。

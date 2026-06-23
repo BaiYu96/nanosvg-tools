@@ -22,6 +22,14 @@ const t = {
     quality: 'Quality',
     preview: 'Preview',
     download: `Download ${formatLabel}`,
+    downloadZip: 'Download ZIP',
+    chooseFiles: 'Choose SVG files',
+    dropHint: 'Drop SVG files here, or paste code below.',
+    clearFiles: 'Clear files',
+    selected: 'Selected files',
+    noFiles: 'No files selected.',
+    processed: 'Processed',
+    skipped: 'Skipped',
     placeholder: '<svg viewBox="0 0 512 512"> ... </svg>',
     invalid: 'Invalid SVG code structure.',
     empty: 'Paste an SVG first.',
@@ -40,6 +48,14 @@ const t = {
     quality: '质量',
     preview: '预览',
     download: `下载 ${formatLabel}`,
+    downloadZip: '下载 ZIP',
+    chooseFiles: '选择 SVG 文件',
+    dropHint: '将 SVG 文件拖拽到这里，或在下方粘贴代码。',
+    clearFiles: '清空文件',
+    selected: '已选文件',
+    noFiles: '未选择文件。',
+    processed: '已处理',
+    skipped: '已跳过',
     placeholder: '<svg viewBox="0 0 512 512"> ... </svg>',
     invalid: 'SVG 代码结构无效，请检查。',
     empty: '请先粘贴 SVG。',
@@ -58,6 +74,14 @@ const t = {
     quality: 'Qualität',
     preview: 'Vorschau',
     download: `${formatLabel} herunterladen`,
+    downloadZip: 'ZIP herunterladen',
+    chooseFiles: 'SVG-Dateien wählen',
+    dropHint: 'SVG-Dateien hier ablegen oder Code unten einfügen.',
+    clearFiles: 'Dateien löschen',
+    selected: 'Ausgewählte Dateien',
+    noFiles: 'Keine Dateien ausgewählt.',
+    processed: 'Verarbeitet',
+    skipped: 'Übersprungen',
     placeholder: '<svg viewBox="0 0 512 512"> ... </svg>',
     invalid: 'Ungültige SVG-Codestruktur.',
     empty: 'Fügen Sie zuerst ein SVG ein.',
@@ -78,6 +102,29 @@ const t = {
     <div class="flex flex-col gap-5">
       <div>
         <label for="svgExportInput" class="block text-sm font-bold text-slate-900 mb-2">{t.paste}</label>
+        <div id="exportDropZone" class="mb-3 rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 transition-colors">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p class="text-xs font-semibold text-slate-500">{t.dropHint}</p>
+            <div class="flex items-center gap-2">
+              <label class="inline-flex cursor-pointer items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-indigo-700">
+                {t.chooseFiles}
+                <input id="exportFiles" type="file" accept=".svg,image/svg+xml" multiple class="sr-only" />
+              </label>
+              <button id="clearExportFiles" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">
+                {t.clearFiles}
+              </button>
+            </div>
+          </div>
+          <div class="mt-4 rounded-lg border border-slate-200 bg-white p-3">
+            <div class="flex items-center justify-between gap-3">
+              <span class="text-xs font-bold uppercase tracking-wide text-slate-500">{t.selected}</span>
+              <span id="exportFileCount" class="rounded-full bg-slate-100 px-2 py-1 text-[11px] font-bold text-slate-500">0</span>
+            </div>
+            <div id="exportFileList" class="mt-3 flex flex-col gap-2 text-xs text-slate-500">
+              <span>{t.noFiles}</span>
+            </div>
+          </div>
+        </div>
         <textarea
           id="svgExportInput"
           rows="10"
@@ -126,15 +173,27 @@ const t = {
   </div>
 </section>
 
+<input type="hidden" id="exportDownloadMsg" value={t.download} />
+<input type="hidden" id="exportDownloadZipMsg" value={t.downloadZip} />
+<input type="hidden" id="exportNoFilesMsg" value={t.noFiles} />
+<input type="hidden" id="exportProcessedMsg" value={t.processed} />
+<input type="hidden" id="exportSkippedMsg" value={t.skipped} />
 <input type="hidden" id="exportInvalidMsg" value={t.invalid} />
 <input type="hidden" id="exportEmptyMsg" value={t.empty} />
 <input type="hidden" id="exportReadyMsg" value={t.ready} />
 <input type="hidden" id="exportFailedMsg" value={t.failed} />
 
 <script>
+  import { zipSync } from 'fflate';
+
   const section = document.querySelector('[data-export-format]') as HTMLElement;
   const format = section?.dataset.exportFormat as 'png' | 'jpg' | 'webp' | 'pdf' | 'icon';
   const input = document.getElementById('svgExportInput') as HTMLTextAreaElement;
+  const fileInput = document.getElementById('exportFiles') as HTMLInputElement;
+  const clearFilesButton = document.getElementById('clearExportFiles') as HTMLButtonElement;
+  const dropZone = document.getElementById('exportDropZone');
+  const fileCount = document.getElementById('exportFileCount');
+  const fileList = document.getElementById('exportFileList');
   const widthInput = document.getElementById('exportWidth') as HTMLInputElement;
   const heightInput = document.getElementById('exportHeight') as HTMLInputElement;
   const qualityInput = document.getElementById('exportQuality') as HTMLInputElement;
@@ -143,10 +202,17 @@ const t = {
   const previewCanvas = document.getElementById('exportPreview') as HTMLCanvasElement;
   const downloadButton = document.getElementById('downloadExport') as HTMLButtonElement;
   const status = document.getElementById('exportStatus');
+  const downloadMsg = (document.getElementById('exportDownloadMsg') as HTMLInputElement)?.value || 'Download';
+  const downloadZipMsg = (document.getElementById('exportDownloadZipMsg') as HTMLInputElement)?.value || 'Download ZIP';
+  const noFilesMsg = (document.getElementById('exportNoFilesMsg') as HTMLInputElement)?.value || 'No files selected.';
+  const processedMsg = (document.getElementById('exportProcessedMsg') as HTMLInputElement)?.value || 'Processed';
+  const skippedMsg = (document.getElementById('exportSkippedMsg') as HTMLInputElement)?.value || 'Skipped';
   const invalidMsg = (document.getElementById('exportInvalidMsg') as HTMLInputElement)?.value || 'Invalid SVG code structure.';
   const emptyMsg = (document.getElementById('exportEmptyMsg') as HTMLInputElement)?.value || 'Paste an SVG first.';
   const readyMsg = (document.getElementById('exportReadyMsg') as HTMLInputElement)?.value || 'Ready to export.';
   const failedMsg = (document.getElementById('exportFailedMsg') as HTMLInputElement)?.value || 'Export failed.';
+  let selectedItems: Array<{ name: string; source: string; status: 'ready' | 'invalid' }> = [];
+  let isProgrammaticInput = false;
 
   const extensionMap = {
     png: 'png',
@@ -186,19 +252,11 @@ const t = {
     return new XMLSerializer().serializeToString(clone);
   };
 
-  const blobToDataUrl = (blob: Blob) => new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsDataURL(blob);
-  });
-
   const canvasToBlob = (canvas: HTMLCanvasElement, type: string, quality?: number) => new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Canvas export failed')), type, quality);
   });
 
-  const renderToCanvas = async (size = { width: Number(widthInput.value), height: Number(heightInput.value) }) => {
-    const source = input.value.trim();
+  const renderToCanvas = async (source: string, size = { width: Number(widthInput.value), height: Number(heightInput.value) }) => {
     if (!source) throw new Error(emptyMsg);
     const svg = sanitizeSvg(source);
     if (!svg) throw new Error(invalidMsg);
@@ -284,10 +342,10 @@ const t = {
     return new Blob(chunks, { type: 'application/pdf' });
   };
 
-  const makeIco = async () => {
+  const makeIco = async (source: string) => {
     const sizes = [16, 32, 48, 64, 128, 256];
     const pngs = await Promise.all(sizes.map(async (size) => {
-      const canvas = await renderToCanvas({ width: size, height: size });
+      const canvas = await renderToCanvas(source, { width: size, height: size });
       return { size, bytes: await uint8(await canvasToBlob(canvas, 'image/png')) };
     }));
 
@@ -316,16 +374,82 @@ const t = {
     return new Blob([buffer], { type: 'image/x-icon' });
   };
 
+  const updateFileList = () => {
+    if (fileCount) fileCount.textContent = String(selectedItems.length);
+    if (downloadButton) downloadButton.textContent = selectedItems.length > 1 ? downloadZipMsg : downloadMsg;
+    fileList?.replaceChildren();
+
+    if (!selectedItems.length) {
+      const empty = document.createElement('span');
+      empty.textContent = noFilesMsg;
+      fileList?.appendChild(empty);
+      return;
+    }
+
+    selectedItems.forEach((item) => {
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2';
+      const name = document.createElement('span');
+      name.className = 'truncate font-mono text-[11px] text-slate-600';
+      name.textContent = item.name;
+      const badge = document.createElement('span');
+      badge.className = item.status === 'ready'
+        ? 'shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-700'
+        : 'shrink-0 rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-700';
+      badge.textContent = item.status;
+      row.append(name, badge);
+      fileList?.appendChild(row);
+    });
+  };
+
+  const setInputSource = (source: string) => {
+    isProgrammaticInput = true;
+    input.value = source;
+    isProgrammaticInput = false;
+  };
+
+  const addFiles = async (files: File[]) => {
+    const svgFiles = files.filter((file) => file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg'));
+    const nextItems = await Promise.all(svgFiles.map(async (file) => {
+      const source = await file.text();
+      return {
+        name: file.name,
+        source,
+        status: parseSvg(source) ? 'ready' as const : 'invalid' as const
+      };
+    }));
+
+    selectedItems = [...selectedItems, ...nextItems];
+    fileInput.value = '';
+    updateFileList();
+
+    const firstReady = selectedItems.find((item) => item.status === 'ready');
+    if (firstReady) {
+      setInputSource(firstReady.source);
+      await refreshPreview();
+    } else {
+      await refreshPreview();
+    }
+  };
+
+  const clearSelectedFiles = async () => {
+    selectedItems = [];
+    fileInput.value = '';
+    updateFileList();
+    await refreshPreview();
+  };
+
   const refreshPreview = async () => {
     status!.textContent = '';
     try {
-      if (!input.value.trim()) {
+      const previewSource = selectedItems.find((item) => item.status === 'ready')?.source || input.value.trim();
+      if (!previewSource) {
         const ctx = previewCanvas.getContext('2d');
         ctx?.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
         status!.textContent = emptyMsg;
         return;
       }
-      const canvas = await renderToCanvas();
+      const canvas = await renderToCanvas(previewSource);
       copyCanvas(canvas, previewCanvas);
       status!.textContent = readyMsg;
       status?.classList.remove('text-red-600');
@@ -337,30 +461,82 @@ const t = {
     }
   };
 
-  const downloadBlob = (blob: Blob) => {
+  const downloadBlob = (blob: Blob, filename = `nanosvg-export.${extensionMap[format]}`) => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `nanosvg-export.${extensionMap[format]}`;
+    link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
   };
 
+  const baseName = (name: string) => name.replace(/\.svg$/i, '').replace(/[^\w.-]+/g, '-').replace(/^-+|-+$/g, '') || 'nanosvg-export';
+
+  const uniqueFileName = (name: string, usedNames: Set<string>) => {
+    const extension = extensionMap[format];
+    const base = baseName(name);
+    let candidate = `${base}.${extension}`;
+    let index = 2;
+    while (usedNames.has(candidate)) {
+      candidate = `${base}-${index}.${extension}`;
+      index += 1;
+    }
+    usedNames.add(candidate);
+    return candidate;
+  };
+
+  const exportSource = async (source: string) => {
+    if (format === 'icon') return makeIco(source);
+    const canvas = await renderToCanvas(source);
+    if (format === 'pdf') return makePdf(canvas);
+    const mime = mimeMap[format as keyof typeof mimeMap];
+    const quality = Number(qualityInput?.value || 0.92);
+    return canvasToBlob(canvas, mime, quality);
+  };
+
+  const exportZip = async () => {
+    const zipFiles: Record<string, Uint8Array> = {};
+    const usedNames = new Set<string>();
+    let processed = 0;
+    let skipped = 0;
+    const readyItems = selectedItems.filter((item) => item.status === 'ready');
+
+    for (const item of readyItems) {
+      try {
+        status!.textContent = `${processedMsg}: ${processed}/${readyItems.length} · ${skippedMsg}: ${skipped}`;
+        const blob = await exportSource(item.source);
+        zipFiles[uniqueFileName(item.name, usedNames)] = await uint8(blob);
+        processed += 1;
+      } catch (error) {
+        skipped += 1;
+      }
+    }
+
+    skipped += selectedItems.length - readyItems.length;
+    if (!processed) throw new Error(invalidMsg);
+
+    const zipped = zipSync(zipFiles);
+    downloadBlob(new Blob([zipped], { type: 'application/zip' }), `nanosvg-${format}-exports.zip`);
+    status!.textContent = `${processedMsg}: ${processed} · ${skippedMsg}: ${skipped}`;
+    status?.classList.remove('text-red-600');
+    status?.classList.add('text-emerald-600');
+  };
+
   const exportFile = async () => {
     try {
-      if (format === 'icon') {
-        downloadBlob(await makeIco());
+      if (selectedItems.length > 1) {
+        await exportZip();
         return;
       }
-      const canvas = await renderToCanvas();
-      copyCanvas(canvas, previewCanvas);
-      if (format === 'pdf') {
-        downloadBlob(await makePdf(canvas));
-        return;
+
+      const item = selectedItems[0];
+      const source = item?.source || input.value.trim();
+      const blob = await exportSource(source);
+      if (format !== 'icon' && format !== 'pdf') {
+        const canvas = await renderToCanvas(source);
+        copyCanvas(canvas, previewCanvas);
       }
-      const mime = mimeMap[format as keyof typeof mimeMap];
-      const quality = Number(qualityInput?.value || 0.92);
-      downloadBlob(await canvasToBlob(canvas, mime, quality));
+      downloadBlob(blob, item ? uniqueFileName(item.name, new Set()) : undefined);
     } catch (error) {
       status!.textContent = error instanceof Error ? error.message : failedMsg;
       status?.classList.remove('text-emerald-600');
@@ -368,11 +544,32 @@ const t = {
     }
   };
 
-  input?.addEventListener('input', refreshPreview);
+  input?.addEventListener('input', () => {
+    if (!isProgrammaticInput && selectedItems.length) {
+      selectedItems = [];
+      updateFileList();
+    }
+    refreshPreview();
+  });
+  fileInput?.addEventListener('change', () => addFiles([...(fileInput.files || [])]));
+  clearFilesButton?.addEventListener('click', clearSelectedFiles);
+  dropZone?.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropZone.classList.add('border-indigo-300', 'bg-indigo-50');
+  });
+  dropZone?.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-indigo-300', 'bg-indigo-50');
+  });
+  dropZone?.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropZone.classList.remove('border-indigo-300', 'bg-indigo-50');
+    addFiles([...(event.dataTransfer?.files || [])]);
+  });
   widthInput?.addEventListener('input', refreshPreview);
   heightInput?.addEventListener('input', refreshPreview);
   qualityInput?.addEventListener('input', refreshPreview);
   backgroundInput?.addEventListener('input', refreshPreview);
   transparentInput?.addEventListener('change', refreshPreview);
   downloadButton?.addEventListener('click', exportFile);
+  updateFileList();
 </script>

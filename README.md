@@ -19,7 +19,7 @@ A lightweight, blazing-fast, and multi-language SVG developer toolbox built with
 - **SVG Optimizer:** Compress SVG markup locally with SVGO, compare file sizes, and preview original vs optimized output.
 - **SVG to React Component:** Convert SVG markup into JSX or TSX components with prop spreading.
 - **SVG Sprite Generator:** Merge multiple SVG files into a symbol-based sprite and usage snippets.
-- **Image & Document Export:** Convert SVG to PNG, JPG, WebP, PDF, and ICO locally with browser rendering.
+- **Image & Document Export:** Convert SVG to PNG, JPG, WebP, PDF, and ICO locally with browser rendering, drag-and-drop uploads, batch conversion, and ZIP downloads.
 - **Enhanced UX:** Interactive textareas with "click-to-select-all" and one-click clipboard copying.
 
 ---
@@ -123,6 +123,26 @@ We are actively expanding this tool into an All-in-One SVG Suite.
 - [x] SVG to PDF
 
 - [x] SVG to Icon
+
+### Planned
+
+- [ ] Unified drag-and-drop file input across Base64, Optimizer, Component, and Sprite tools.
+
+- [ ] Export size presets for favicon, app icon, social preview, and custom aspect-ratio locking.
+
+- [ ] SVG color replacement: detect fill/stroke, replace brand colors, and convert icons to `currentColor`.
+
+- [ ] SVG viewBox and dimension repair: generate missing viewBox, remove fixed width/height, and make SVGs responsive.
+
+- [ ] SVG to CSS Mask: generate `mask-image` and `-webkit-mask-image` snippets for recolorable icons.
+
+- [ ] SVG to Vue / Svelte components.
+
+- [ ] Icon Font Generator: build WOFF2 icon fonts, CSS classes, and preview pages from SVG sets.
+
+- [ ] SVG Security Scanner: detect and clean `script`, `foreignObject`, event handlers, and `javascript:` URLs.
+
+- [ ] SVG Compatibility Checker: detect external assets, missing namespaces, filters, masks, clip paths, and browser-risky features.
 
 ## 📄 License
 
