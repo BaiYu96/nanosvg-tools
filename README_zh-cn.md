@@ -17,8 +17,9 @@
   - **CSS Data URI:** 针对 CSS `background-image` 深度优化，对特定关键字符（如 `#`, `{`, `}`, `<`, `>` 等）进行精准转义，避免多浏览器兼容性崩溃。
   - **Base64 字符串:** 标准的 Base64 编码，完美契合 HTML `<img>` 标签的 src 属性。
 - **SVG 压缩优化:** 使用 SVGO 在浏览器本地压缩 SVG，支持体积对比、原图与优化后预览。
-- **SVG 转 React 组件:** 将 SVG 源码转换为 JSX 或 TSX 组件，并支持 props 透传。
+- **SVG 转组件:** 将 SVG 源码转换为 React JSX/TSX、Vue 和 Svelte 组件。
 - **SVG Sprite 生成器:** 将多个 SVG 文件合并为基于 symbol 的精灵图和 use 用法代码。
+- **Icon Font 生成器:** 从 SVG 集合生成 WOFF2 字体、CSS class 和 HTML 预览。
 - **图片与文档导出:** 在浏览器本地将 SVG 转换为 PNG、JPG、WebP、PDF 和 ICO，支持拖拽上传、批量转换和 ZIP 下载。
 - **极佳交互体验:** 输出文本框支持“点击即全选”以及“一键复制到剪贴板”，大幅提升开发搬砖效率。
 
@@ -110,7 +111,11 @@
 
 - [x] SVG 转组件 (SVG to JSX/TSX): 将原始 SVG 转换为干净的、可直接复制使用的 React 组件。
 
+- [x] SVG 转 Vue / Svelte 组件。
+
 - [x] SVG 精灵图合并 (SVG Sprite): 支持将多个图标批量合并为一个标准的 SVG Sprite 集合文件。
+
+- [x] Icon Font 生成器：从 SVG 集合生成 WOFF2 字体、CSS class 和预览页面。
 
 - [x] SVG 转 PNG
 
@@ -122,21 +127,17 @@
 
 - [x] SVG 转 Icon
 
+- [x] 导出尺寸预设：支持 favicon、App Icon、社交分享图、自定义比例锁定。
+
 ### 计划开发
 
 - [ ] 统一文件拖拽与上传输入：覆盖 Base64、Optimizer、Component、Sprite 等工具。
-
-- [ ] 导出尺寸预设：支持 favicon、App Icon、社交分享图、自定义比例锁定。
 
 - [ ] SVG 颜色替换：识别 fill/stroke，批量替换品牌色，并支持一键转为 `currentColor`。
 
 - [ ] SVG viewBox 与尺寸修复：自动生成缺失 viewBox，移除固定宽高，让 SVG 响应式缩放。
 
 - [ ] SVG 转 CSS Mask：生成 `mask-image` 和 `-webkit-mask-image` 代码片段，方便单色图标换色。
-
-- [ ] SVG 转 Vue / Svelte 组件。
-
-- [ ] Icon Font 生成器：从 SVG 集合生成 WOFF2 字体、CSS class 和预览页面。
 
 - [ ] SVG 安全扫描：检测并清理 `script`、`foreignObject`、事件属性和 `javascript:` 链接。
 

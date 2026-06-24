@@ -17,8 +17,9 @@ A lightweight, blazing-fast, and multi-language SVG developer toolbox built with
   - **CSS Data URI:** Properly escaped symbols (`#`, `{`, `}`, `<`, `>`, etc.) optimized directly for CSS `background-image` use.
   - **Base64 String:** Raw base64 encoding suitable for HTML `<img>` src tags.
 - **SVG Optimizer:** Compress SVG markup locally with SVGO, compare file sizes, and preview original vs optimized output.
-- **SVG to React Component:** Convert SVG markup into JSX or TSX components with prop spreading.
+- **SVG to Components:** Convert SVG markup into React JSX/TSX, Vue, and Svelte components.
 - **SVG Sprite Generator:** Merge multiple SVG files into a symbol-based sprite and usage snippets.
+- **Icon Font Generator:** Build WOFF2 icon fonts, CSS classes, and preview HTML from SVG sets.
 - **Image & Document Export:** Convert SVG to PNG, JPG, WebP, PDF, and ICO locally with browser rendering, drag-and-drop uploads, batch conversion, and ZIP downloads.
 - **Enhanced UX:** Interactive textareas with "click-to-select-all" and one-click clipboard copying.
 
@@ -112,7 +113,11 @@ We are actively expanding this tool into an All-in-One SVG Suite.
 
 - [x] SVG to JSX/TSX: Convert raw SVGs into clean, copy-pasteable React components.
 
+- [x] SVG to Vue / Svelte components.
+
 - [x] SVG Sprite Generator: Combine multiple icons into a single SVG sprite sheet.
+
+- [x] Icon Font Generator: Build WOFF2 icon fonts, CSS classes, and preview pages from SVG sets.
 
 - [x] SVG to PNG
 
@@ -124,21 +129,17 @@ We are actively expanding this tool into an All-in-One SVG Suite.
 
 - [x] SVG to Icon
 
+- [x] Export size presets for favicon, app icon, social preview, and custom aspect-ratio locking.
+
 ### Planned
 
 - [ ] Unified drag-and-drop file input across Base64, Optimizer, Component, and Sprite tools.
-
-- [ ] Export size presets for favicon, app icon, social preview, and custom aspect-ratio locking.
 
 - [ ] SVG color replacement: detect fill/stroke, replace brand colors, and convert icons to `currentColor`.
 
 - [ ] SVG viewBox and dimension repair: generate missing viewBox, remove fixed width/height, and make SVGs responsive.
 
 - [ ] SVG to CSS Mask: generate `mask-image` and `-webkit-mask-image` snippets for recolorable icons.
-
-- [ ] SVG to Vue / Svelte components.
-
-- [ ] Icon Font Generator: build WOFF2 icon fonts, CSS classes, and preview pages from SVG sets.
 
 - [ ] SVG Security Scanner: detect and clean `script`, `foreignObject`, event handlers, and `javascript:` URLs.
 

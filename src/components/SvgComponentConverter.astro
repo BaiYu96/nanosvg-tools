@@ -9,6 +9,8 @@ const t = {
     mode: "Output mode",
     jsx: "JSX",
     tsx: "TSX",
+    vue: "Vue",
+    svelte: "Svelte",
     placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
     title2: "2. Component Output",
     copy: "Copy",
@@ -25,6 +27,8 @@ const t = {
     mode: "输出模式",
     jsx: "JSX",
     tsx: "TSX",
+    vue: "Vue",
+    svelte: "Svelte",
     placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
     title2: "2. 组件代码",
     copy: "复制",
@@ -41,6 +45,8 @@ const t = {
     mode: "Ausgabemodus",
     jsx: "JSX",
     tsx: "TSX",
+    vue: "Vue",
+    svelte: "Svelte",
     placeholderInput: "<svg viewBox=\"0 0 24 24\"> ... </svg>",
     title2: "2. Komponenten-Ausgabe",
     copy: "Kopieren",
@@ -70,9 +76,11 @@ const t = {
     </label>
     <div class="flex flex-col gap-1 text-xs font-semibold text-slate-600">
       <span>{t.mode}</span>
-      <div class="grid grid-cols-2 rounded-xl border border-slate-300 bg-slate-50 p-1">
+      <div class="grid grid-cols-4 rounded-xl border border-slate-300 bg-slate-50 p-1">
         <button id="modeJsx" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900">{t.jsx}</button>
         <button id="modeTsx" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">{t.tsx}</button>
+        <button id="modeVue" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">{t.vue}</button>
+        <button id="modeSvelte" type="button" class="rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">{t.svelte}</button>
       </div>
     </div>
   </div>
@@ -121,11 +129,13 @@ const t = {
   const copyButton = document.getElementById('copyComponent') as HTMLButtonElement;
   const modeJsx = document.getElementById('modeJsx') as HTMLButtonElement;
   const modeTsx = document.getElementById('modeTsx') as HTMLButtonElement;
+  const modeVue = document.getElementById('modeVue') as HTMLButtonElement;
+  const modeSvelte = document.getElementById('modeSvelte') as HTMLButtonElement;
   const invalidMsg = (document.getElementById('componentInvalidMsg') as HTMLInputElement)?.value || 'Invalid SVG code structure.';
   const emptyMsg = (document.getElementById('componentEmptyMsg') as HTMLInputElement)?.value || 'Paste an SVG first.';
   const copiedMsg = (document.getElementById('componentCopiedMsg') as HTMLInputElement)?.value || 'Copied!';
 
-  let outputMode: 'jsx' | 'tsx' = 'jsx';
+  let outputMode: 'jsx' | 'tsx' | 'vue' | 'svelte' = 'jsx';
 
   const attrMap: Record<string, string> = {
     'class': 'className',
@@ -217,8 +227,26 @@ const t = {
       .replace(/></g, '>\n  <');
   };
 
+  const serializeNativeNode = (node: Element) => {
+    node.querySelectorAll('*').forEach((child) => serializeNativeNode(child));
+    return new XMLSerializer().serializeToString(node)
+      .replace(/\sxmlns(:xlink)?="[^"]*"/g, '')
+      .replace(/><\/(path|circle|rect|line|polyline|polygon|stop|use)>/g, ' />')
+      .replace(/></g, '>\n  <');
+  };
+
   const buildComponent = (svg: SVGElement, componentName: string) => {
-    const jsxSvg = serializeNode(svg);
+    if (outputMode === 'vue') {
+      const vueSvg = serializeNativeNode(svg.cloneNode(true) as SVGElement).replace('<svg', () => '<svg v-bind="$attrs"');
+      return `<template>\n  ${vueSvg}\n</template>\n`;
+    }
+
+    if (outputMode === 'svelte') {
+      const svelteSvg = serializeNativeNode(svg.cloneNode(true) as SVGElement).replace('<svg', () => '<svg {...$$props}');
+      return `${svelteSvg}\n`;
+    }
+
+    const jsxSvg = serializeNode(svg.cloneNode(true) as SVGElement);
     if (outputMode === 'tsx') {
       return `import type { SVGProps } from 'react';\n\nexport default function ${componentName}(props: SVGProps<SVGSVGElement>) {\n  return (\n    ${jsxSvg.replace('<svg', '<svg {...props}')}\n  );\n}\n`;
     }
@@ -256,14 +284,15 @@ const t = {
     output.value = buildComponent(cleanSvg, toPascalCase(nameInput.value));
   };
 
-  const setMode = (mode: 'jsx' | 'tsx') => {
+  const inactiveClass = 'rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900';
+  const activeClass = 'rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900';
+
+  const setMode = (mode: 'jsx' | 'tsx' | 'vue' | 'svelte') => {
     outputMode = mode;
-    modeJsx.className = mode === 'jsx'
-      ? 'rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900'
-      : 'rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900';
-    modeTsx.className = mode === 'tsx'
-      ? 'rounded-lg px-4 py-2 text-xs font-bold text-white bg-slate-900'
-      : 'rounded-lg px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900';
+    modeJsx.className = mode === 'jsx' ? activeClass : inactiveClass;
+    modeTsx.className = mode === 'tsx' ? activeClass : inactiveClass;
+    modeVue.className = mode === 'vue' ? activeClass : inactiveClass;
+    modeSvelte.className = mode === 'svelte' ? activeClass : inactiveClass;
     convert();
   };
 
@@ -271,6 +300,8 @@ const t = {
   nameInput?.addEventListener('input', convert);
   modeJsx?.addEventListener('click', () => setMode('jsx'));
   modeTsx?.addEventListener('click', () => setMode('tsx'));
+  modeVue?.addEventListener('click', () => setMode('vue'));
+  modeSvelte?.addEventListener('click', () => setMode('svelte'));
   output?.addEventListener('click', () => output.value && output.select());
   copyButton?.addEventListener('click', () => {
     if (!output.value) return;

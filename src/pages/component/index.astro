@@ -4,20 +4,20 @@ import SvgComponentConverter from '../../components/SvgComponentConverter.astro'
 ---
 
 <Layout
-  title="Free SVG to React Component Converter - JSX & TSX"
-  description="Convert raw SVG markup into clean React JSX or TSX components locally in your browser. Preview the SVG and copy component code instantly."
+  title="Free SVG Component Converter - React, Vue & Svelte"
+  description="Convert raw SVG markup into clean React JSX/TSX, Vue, or Svelte components locally in your browser. Preview the SVG and copy component code instantly."
 >
   <SvgComponentConverter />
 
   <article class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 prose max-w-none mt-4 text-slate-700 leading-relaxed">
     <h2 id="features" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Why Convert SVG to Components?</h2>
-    <p class="mb-4 text-sm">React components make icons easier to reuse, style, and pass props into. This converter handles common SVG-to-JSX attribute changes and keeps everything local.</p>
+    <p class="mb-4 text-sm">Componentized icons are easier to reuse, style, and pass props or attributes into. This converter supports React JSX/TSX, Vue, and Svelte while keeping everything local.</p>
     <ul class="list-disc pl-5 mb-6 text-sm flex flex-col gap-2">
-      <li><strong>JSX and TSX:</strong> Switch between plain React components and typed SVG props.</li>
-      <li><strong>Prop Ready:</strong> Generated components spread props onto the root SVG.</li>
+      <li><strong>React, Vue, and Svelte:</strong> Switch between JSX, TSX, Vue template, and Svelte output.</li>
+      <li><strong>Attribute Ready:</strong> Generated components spread props or framework attributes onto the root SVG.</li>
       <li><strong>Safer Preview:</strong> Script-like content is removed before rendering.</li>
     </ul>
     <h2 id="faq" class="text-xl font-bold text-slate-900 mb-4 border-b pb-2 border-slate-100">Frequently Asked Questions (FAQ)</h2>
-    <p class="text-sm text-slate-600">The output is designed for React projects. Vue conversion can be added later as a separate mode.</p>
+    <p class="text-sm text-slate-600">React output uses JSX-friendly attributes, Vue output keeps native SVG attributes with <code>v-bind="$attrs"</code>, and Svelte output spreads <code>$$props</code> on the root SVG.</p>
   </article>
 </Layout>

@@ -1,0 +1,360 @@
+---
+const currentLang = Astro.currentLocale || 'en';
+
+const t = {
+  en: {
+    title: 'Icon Font Generator',
+    subtitle: 'Build WOFF2 icon fonts, CSS classes, and preview HTML locally from SVG files.',
+    choose: 'Choose SVG files',
+    clear: 'Clear',
+    download: 'Download font ZIP',
+    drop: 'Drop SVG files here, or choose files.',
+    selected: 'Selected icons',
+    output: 'Generated CSS',
+    preview: 'Preview HTML',
+    noFiles: 'No SVG files selected.',
+    ready: 'Ready',
+    invalid: 'Skipped unsupported or invalid SVG files.',
+    empty: 'Choose one or more SVG files first.'
+  },
+  zh: {
+    title: 'Icon Font 生成器',
+    subtitle: '在浏览器本地从 SVG 文件生成 WOFF2 字体、CSS class 和 HTML 预览。',
+    choose: '选择 SVG 文件',
+    clear: '清空',
+    download: '下载字体 ZIP',
+    drop: '拖拽 SVG 文件到这里，或点击选择文件。',
+    selected: '已选图标',
+    output: '生成的 CSS',
+    preview: '预览 HTML',
+    noFiles: '未选择 SVG 文件。',
+    ready: '已准备好',
+    invalid: '已跳过不支持或无效的 SVG 文件。',
+    empty: '请先选择一个或多个 SVG 文件。'
+  },
+  de: {
+    title: 'Icon Font Generator',
+    subtitle: 'Erzeugen Sie WOFF2-Iconfonts, CSS-Klassen und HTML-Vorschau lokal aus SVG-Dateien.',
+    choose: 'SVG-Dateien wählen',
+    clear: 'Leeren',
+    download: 'Font-ZIP herunterladen',
+    drop: 'SVG-Dateien hier ablegen oder Dateien wählen.',
+    selected: 'Ausgewählte Icons',
+    output: 'Generiertes CSS',
+    preview: 'Vorschau-HTML',
+    noFiles: 'Keine SVG-Dateien ausgewählt.',
+    ready: 'Bereit',
+    invalid: 'Nicht unterstützte oder ungültige SVG-Dateien wurden übersprungen.',
+    empty: 'Wählen Sie zuerst eine oder mehrere SVG-Dateien.'
+  }
+}[currentLang as 'en' | 'zh' | 'de'];
+---
+
+<section class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col gap-6">
+  <div>
+    <p class="text-xs font-bold uppercase tracking-[0.18em] text-indigo-600">{t.title}</p>
+    <h1 class="mt-2 text-2xl font-black text-slate-950">{t.title}</h1>
+    <p class="mt-1 text-xs text-slate-500">{t.subtitle}</p>
+  </div>
+
+  <div id="fontDropZone" class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-4 transition-colors">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs font-semibold text-slate-500">{t.drop}</p>
+      <div class="flex items-center gap-2">
+        <label class="inline-flex cursor-pointer items-center justify-center rounded-lg bg-slate-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-indigo-700">
+          {t.choose}
+          <input id="fontFiles" type="file" accept=".svg,image/svg+xml" multiple class="sr-only" />
+        </label>
+        <button id="clearFontFiles" type="button" class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50">
+          {t.clear}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-4">
+    <aside class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-xs font-bold uppercase tracking-wide text-slate-500">{t.selected}</h2>
+        <span id="fontIconCount" class="rounded-full bg-white px-2 py-1 text-[11px] font-bold text-slate-500 border border-slate-200">0</span>
+      </div>
+      <div id="fontIconList" class="mt-4 flex flex-col gap-2 text-xs text-slate-500">
+        <span>{t.noFiles}</span>
+      </div>
+      <button id="downloadFontZip" class="mt-4 w-full rounded-xl bg-slate-900 px-4 py-3 text-xs font-bold text-white transition-colors hover:bg-indigo-700">
+        {t.download}
+      </button>
+      <p id="fontStatus" class="mt-3 min-h-4 text-xs font-semibold text-slate-500">{t.empty}</p>
+    </aside>
+
+    <div class="flex flex-col gap-4">
+      <div>
+        <h2 class="mb-2 text-sm font-bold text-slate-900">{t.output}</h2>
+        <textarea id="fontCssOutput" readonly rows="10" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+      </div>
+      <div>
+        <h2 class="mb-2 text-sm font-bold text-slate-900">{t.preview}</h2>
+        <textarea id="fontHtmlOutput" readonly rows="8" class="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl font-mono text-xs text-slate-600 focus:outline-none focus:ring-1 focus:ring-indigo-500"></textarea>
+      </div>
+      <div id="fontPreviewGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3"></div>
+    </div>
+  </div>
+</section>
+
+<input type="hidden" id="fontNoFilesMsg" value={t.noFiles} />
+<input type="hidden" id="fontReadyMsg" value={t.ready} />
+<input type="hidden" id="fontInvalidMsg" value={t.invalid} />
+<input type="hidden" id="fontEmptyMsg" value={t.empty} />
+
+<script>
+  import svg2ttf from 'svg2ttf';
+  import ttf2woff2ModuleSource from 'ttf2woff2/jssrc/ttf2woff2.cjs?raw';
+  import ttf2woff2WasmUrl from 'ttf2woff2/jssrc/ttf2woff2.wasm?url';
+  import svgpath from 'svgpath';
+  import { zipSync } from 'fflate';
+
+  const fileInput = document.getElementById('fontFiles') as HTMLInputElement;
+  const dropZone = document.getElementById('fontDropZone');
+  const clearButton = document.getElementById('clearFontFiles') as HTMLButtonElement;
+  const downloadButton = document.getElementById('downloadFontZip') as HTMLButtonElement;
+  const iconList = document.getElementById('fontIconList');
+  const iconCount = document.getElementById('fontIconCount');
+  const cssOutput = document.getElementById('fontCssOutput') as HTMLTextAreaElement;
+  const htmlOutput = document.getElementById('fontHtmlOutput') as HTMLTextAreaElement;
+  const previewGrid = document.getElementById('fontPreviewGrid');
+  const status = document.getElementById('fontStatus');
+  const noFilesMsg = (document.getElementById('fontNoFilesMsg') as HTMLInputElement)?.value || 'No files selected.';
+  const readyMsg = (document.getElementById('fontReadyMsg') as HTMLInputElement)?.value || 'Ready';
+  const invalidMsg = (document.getElementById('fontInvalidMsg') as HTMLInputElement)?.value || 'Skipped invalid SVG files.';
+  const emptyMsg = (document.getElementById('fontEmptyMsg') as HTMLInputElement)?.value || 'Choose SVG files first.';
+
+  type GlyphItem = {
+    name: string;
+    className: string;
+    unicode: string;
+    path: string;
+    source: string;
+  };
+
+  let glyphs: GlyphItem[] = [];
+  let woff2ModulePromise: Promise<any> | null = null;
+
+  const parseSvg = (source: string) => {
+    const doc = new DOMParser().parseFromString(source, 'image/svg+xml');
+    if (doc.querySelector('parsererror')) return null;
+    const svg = doc.documentElement;
+    return svg?.tagName.toLowerCase() === 'svg' ? svg : null;
+  };
+
+  const sanitizeSvg = (svg: SVGElement) => {
+    const clone = svg.cloneNode(true) as SVGElement;
+    clone.querySelectorAll('script, foreignObject, iframe, object, embed').forEach((node) => node.remove());
+    clone.querySelectorAll('*').forEach((node) => {
+      [...node.attributes].forEach((attr) => {
+        const name = attr.name.toLowerCase();
+        const value = attr.value.trim().toLowerCase();
+        if (name.startsWith('on') || value.startsWith('javascript:')) {
+          node.removeAttribute(attr.name);
+        }
+      });
+    });
+    return new XMLSerializer().serializeToString(clone);
+  };
+
+  const slug = (name: string) => name.replace(/\.svg$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'icon';
+
+  const shapeToPath = (node: Element) => {
+    const tag = node.tagName.toLowerCase();
+    if (tag === 'path') return node.getAttribute('d') || '';
+    if (tag === 'rect') {
+      const x = Number(node.getAttribute('x') || 0);
+      const y = Number(node.getAttribute('y') || 0);
+      const w = Number(node.getAttribute('width') || 0);
+      const h = Number(node.getAttribute('height') || 0);
+      return w && h ? `M${x} ${y}H${x + w}V${y + h}H${x}Z` : '';
+    }
+    if (tag === 'circle') {
+      const cx = Number(node.getAttribute('cx') || 0);
+      const cy = Number(node.getAttribute('cy') || 0);
+      const r = Number(node.getAttribute('r') || 0);
+      return r ? `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${r * 2} 0a${r} ${r} 0 1 0 ${-r * 2} 0` : '';
+    }
+    return '';
+  };
+
+  const normalizedPath = (svg: SVGElement) => {
+    const viewBox = svg.getAttribute('viewBox')?.trim().split(/\s+/).map(Number);
+    const minX = viewBox?.[0] || 0;
+    const minY = viewBox?.[1] || 0;
+    const vbWidth = viewBox?.[2] || Number(svg.getAttribute('width') || 1000);
+    const vbHeight = viewBox?.[3] || Number(svg.getAttribute('height') || 1000);
+    const scale = 1000 / Math.max(vbWidth, vbHeight);
+    const xShift = -minX * scale + (1000 - vbWidth * scale) / 2;
+    const yShift = (minY + vbHeight) * scale + (1000 - vbHeight * scale) / 2;
+    const pathData = [...svg.querySelectorAll('path, rect, circle')]
+      .map(shapeToPath)
+      .filter(Boolean)
+      .join(' ');
+
+    if (!pathData) return '';
+    return svgpath(pathData).matrix([scale, 0, 0, -scale, xShift, yShift]).round(2).toString();
+  };
+
+  const buildSvgFont = () => {
+    const glyphMarkup = glyphs.map((glyph) => `<glyph glyph-name="${glyph.className}" unicode="${glyph.unicode}" horiz-adv-x="1000" d="${glyph.path}" />`).join('\n');
+    return `<svg xmlns="http://www.w3.org/2000/svg"><defs><font id="nanosvg-icons" horiz-adv-x="1000"><font-face font-family="NanoSVGIcons" units-per-em="1000" ascent="1000" descent="0" />${glyphMarkup}</font></defs></svg>`;
+  };
+
+  const buildCss = () => `@font-face {\n  font-family: "NanoSVGIcons";\n  src: url("./nanosvg-icons.woff2") format("woff2");\n  font-weight: normal;\n  font-style: normal;\n}\n\n.nsi {\n  font-family: "NanoSVGIcons";\n  font-style: normal;\n  font-weight: normal;\n  speak: never;\n  display: inline-block;\n}\n\n${glyphs.map((glyph) => `.nsi-${glyph.className}::before { content: "\\\\${glyph.unicode.codePointAt(0)!.toString(16)}"; }`).join('\n')}\n`;
+
+  const buildHtml = () => `<!doctype html>\n<html><head><meta charset="utf-8"><link rel="stylesheet" href="./nanosvg-icons.css"></head><body>\n${glyphs.map((glyph) => `<div><i class="nsi nsi-${glyph.className}"></i> ${glyph.className}</div>`).join('\n')}\n</body></html>`;
+
+  const loadWoff2Module = async () => {
+    if (woff2ModulePromise) return woff2ModulePromise;
+    woff2ModulePromise = (async () => {
+      const wasmBinary = await fetch(ttf2woff2WasmUrl).then((response) => {
+        if (!response.ok) throw new Error(`Unable to load WOFF2 encoder: ${response.status}`);
+        return response.arrayBuffer();
+      });
+      const module = { exports: {} };
+      const requireFallback = (name: string) => {
+        throw new Error(`Unsupported WOFF2 encoder dependency: ${name}`);
+      };
+      const factory = new Function(
+        'Module',
+        'module',
+        'exports',
+        'require',
+        `${ttf2woff2ModuleSource}\nreturn module.exports;`
+      );
+      return factory({ wasmBinary }, module, module.exports, requireFallback);
+    })();
+    return woff2ModulePromise;
+  };
+
+  const ttfToWoff2 = async (ttf: Uint8Array | ArrayBuffer) => {
+    const encoder = await loadWoff2Module();
+    const input = ttf instanceof Uint8Array ? ttf : new Uint8Array(ttf);
+    const inputBuffer = encoder._malloc(input.length + 1);
+    const outputSizePtr = encoder._malloc(4);
+    let outputBufferPtr = 0;
+
+    encoder.writeArrayToMemory(input, inputBuffer);
+    try {
+      outputBufferPtr = encoder.convert(inputBuffer, input.length, outputSizePtr);
+      const outputSize = encoder.getValue(outputSizePtr, 'i32');
+      if (!outputSize) throw new Error('WOFF2 conversion failed.');
+      const output = new Uint8Array(outputSize);
+      for (let i = 0; i < outputSize; i += 1) {
+        output[i] = encoder.getValue(outputBufferPtr + i, 'i8');
+      }
+      return output;
+    } finally {
+      encoder.freePtrs(outputBufferPtr, outputSizePtr);
+    }
+  };
+
+  const render = (skipped = 0) => {
+    iconCount!.textContent = String(glyphs.length);
+    iconList?.replaceChildren();
+    previewGrid?.replaceChildren();
+
+    if (!glyphs.length) {
+      iconList?.append(noFilesMsg);
+      cssOutput.value = '';
+      htmlOutput.value = '';
+      status!.textContent = emptyMsg;
+      return;
+    }
+
+    glyphs.forEach((glyph) => {
+      const row = document.createElement('div');
+      row.className = 'rounded-lg border border-slate-200 bg-white px-3 py-2 font-mono text-[11px] text-slate-600';
+      row.textContent = `.nsi-${glyph.className}`;
+      iconList?.appendChild(row);
+
+      const card = document.createElement('div');
+      card.className = 'rounded-xl border border-slate-200 bg-white p-4 text-center text-xs text-slate-600';
+      card.innerHTML = `<div class="mx-auto mb-2 flex h-12 w-12 items-center justify-center">${glyph.source}</div><code>.nsi-${glyph.className}</code>`;
+      previewGrid?.appendChild(card);
+    });
+
+    cssOutput.value = buildCss();
+    htmlOutput.value = buildHtml();
+    status!.textContent = skipped ? `${readyMsg}. ${invalidMsg}` : readyMsg;
+  };
+
+  const loadFiles = async (files: File[]) => {
+    let skipped = 0;
+    const usedNames = new Set(glyphs.map((glyph) => glyph.className));
+    for (const file of files) {
+      const source = await file.text();
+      const svg = parseSvg(source);
+      const path = svg ? normalizedPath(svg) : '';
+      if (!svg || !path) {
+        skipped += 1;
+        continue;
+      }
+      let className = slug(file.name);
+      let suffix = 2;
+      while (usedNames.has(className)) {
+        className = `${slug(file.name)}-${suffix}`;
+        suffix += 1;
+      }
+      usedNames.add(className);
+      glyphs.push({
+        name: file.name,
+        className,
+        unicode: String.fromCodePoint(0xe001 + glyphs.length),
+        path,
+        source: sanitizeSvg(svg)
+      });
+    }
+    fileInput.value = '';
+    render(skipped);
+  };
+
+  const downloadZip = async () => {
+    if (!glyphs.length) {
+      status!.textContent = emptyMsg;
+      return;
+    }
+    const svgFont = buildSvgFont();
+    const ttf = svg2ttf(svgFont, { familyname: 'NanoSVGIcons', fullname: 'NanoSVGIcons' });
+    const woff2 = await ttfToWoff2(ttf.buffer);
+    const files = {
+      'nanosvg-icons.woff2': woff2,
+      'nanosvg-icons.css': new TextEncoder().encode(buildCss()),
+      'preview.html': new TextEncoder().encode(buildHtml()),
+      'nanosvg-icons.svg': new TextEncoder().encode(svgFont)
+    };
+    const zipped = zipSync(files);
+    const url = URL.createObjectURL(new Blob([zipped], { type: 'application/zip' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'nanosvg-icon-font.zip';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  fileInput?.addEventListener('change', () => loadFiles([...(fileInput.files || [])]));
+  dropZone?.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dropZone.classList.add('border-indigo-400', 'bg-indigo-50');
+  });
+  dropZone?.addEventListener('dragleave', () => {
+    dropZone.classList.remove('border-indigo-400', 'bg-indigo-50');
+  });
+  dropZone?.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dropZone.classList.remove('border-indigo-400', 'bg-indigo-50');
+    loadFiles([...(event.dataTransfer?.files || [])].filter((file) => file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')));
+  });
+  clearButton?.addEventListener('click', () => {
+    glyphs = [];
+    fileInput.value = '';
+    render();
+  });
+  downloadButton?.addEventListener('click', downloadZip);
+  render();
+</script>
